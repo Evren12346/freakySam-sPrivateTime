@@ -2,13 +2,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TOOL="$SCRIPT_DIR/bin/freaky-sams-private-time.sh"
+TOOL="$SCRIPT_DIR/bin/si_or_no_goobledygook.sh"
 
 chmod +x "$TOOL"
 
 while true; do
   clear
-  echo "freaky sam's private time"
+  echo "si or no goobledygook"
   echo
   echo "1. Install dependencies"
   echo "2. Doctor"

@@ -6,6 +6,18 @@ A macOS anonymity helper that routes network traffic through Tor using stricter 
 
 The GitHub repo explains install right here at the top because most users will land on this page first.
 
+## GitHub Quick Start (Copy/Paste)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-from-github.sh | bash
+```
+
+Then launch:
+
+```bash
+~/Applications/Si\ Or\ No\ Goobledygook/Si\ Or\ No\ Goobledygook.command
+```
+
 ## Direct ZIP Download
 
 - Latest release ZIP (`v1.2.0`): https://github.com/Evren12346/si-or-no-goobledygook/archive/refs/tags/v1.2.0.zip
@@ -49,7 +61,7 @@ After installing:
 The easiest way to do this is the included menu launcher:
 
 ```bash
-./Freaky\ Sams\ Private\ Time.command
+./Si\ Or\ No\ Goobledygook.command
 ```
 
 The installer also tries to create:
@@ -88,7 +100,7 @@ For a beautiful, native macOS experience with a modern GUI:
 cd macos-app
 ./build.sh
 # Or open in Xcode:
-open SiOrNoGoobledygook.xcodeproj
+open Package.swift
 ```
 
 The native app includes:
@@ -168,16 +180,16 @@ open ~/Applications/Si\ Or\ No\ Goobledygook.app
 ./bin/si_or_no_goobledygook.sh launch-safe-app tor-browser
 
 # Launch Tor Browser with reminders
-./bin/freaky-sams-private-time.sh open-tor-browser
+./bin/si_or_no_goobledygook.sh open-tor-browser
 
 # Restore normal state
-./bin/freaky-sams-private-time.sh stop
+./bin/si_or_no_goobledygook.sh stop
 
 # Fast emergency rollback
-./bin/freaky-sams-private-time.sh panic-stop
+./bin/si_or_no_goobledygook.sh panic-stop
 
 # Restore saved hostname values
-./bin/freaky-sams-private-time.sh restore-hostname
+./bin/si_or_no_goobledygook.sh restore-hostname
 
 # Optional .app wrapper build on macOS
 ./build_macos_app.sh
@@ -191,10 +203,10 @@ open ~/Applications/Si\ Or\ No\ Goobledygook.app
 
 ## Everyday Use
 
-- Double-click `Freaky Sams Private Time.command` for the menu-driven version.
-- If the installer created `~/Applications/Freaky Sams Private Time.app`, you can launch it from Launchpad like a normal Mac app.
-- Run `./bin/freaky-sams-private-time.sh start` before an anonymous session.
-- Run `./bin/freaky-sams-private-time.sh stop` when the session ends.
+- Double-click `Si Or No Goobledygook.command` for the menu-driven version.
+- If the installer created `~/Applications/Si Or No Goobledygook.app`, you can launch it from Launchpad like a normal Mac app.
+- Run `./bin/si_or_no_goobledygook.sh start` before an anonymous session.
+- Run `./bin/si_or_no_goobledygook.sh stop` when the session ends.
 - Use `panic-stop` if you want the fastest available rollback.
 
 ## Packaging and Release Builds

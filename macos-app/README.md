@@ -19,17 +19,17 @@ swift build -c release
 
 Using Xcode:
 ```bash
-open SiOrNoGoobledygook.xcodeproj
-# Build using Cmd+B or Product > Build
+open Package.swift
+# Xcode will open the Swift package. Build using Cmd+B.
 ```
 
 ### Installation
 
 1. Build the app (see above)
-2. The built app will be in `.build/release/SiOrNoGoobledygook` or `build/Release/`
+2. The built binary will be in `.build/release/SiOrNoGoobledygook`
 3. Copy to Applications:
 ```bash
-cp -r build/Release/SiOrNoGoobledygook.app ~/Applications/
+cp .build/release/SiOrNoGoobledygook ~/Applications/
 ```
 
 ## Features
