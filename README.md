@@ -1,6 +1,47 @@
-# freaky sam's private time
+# Freaky Sam's Private Time
 
 A macOS anonymity helper that routes network traffic through Tor using stricter macOS proxy hardening.
+
+## Fast Install for Mac Users
+
+### Option 1: GitHub ZIP download
+
+1. Download the repository ZIP from GitHub and unzip it.
+2. Open the unzipped folder.
+3. Double-click `Install Freaky Sams Private Time.command`.
+4. If macOS blocks the launcher the first time, right-click it and choose `Open`.
+5. After install finishes, double-click `Freaky Sams Private Time.command` to use the menu.
+
+### Option 2: One-line Terminal install from GitHub
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/freakySam-sPrivateTime/main/install-from-github.sh | bash
+```
+
+This installs the project into `~/Applications/Freaky Sams Private Time`, installs dependencies, and prepares the launchers for you.
+
+### Option 3: Git clone
+
+```bash
+git clone https://github.com/Evren12346/freakySam-sPrivateTime.git
+cd freakySam-sPrivateTime
+./install.sh
+```
+
+## First Run
+
+After installing:
+
+1. Run `doctor` to verify macOS tooling and Tor dependencies.
+2. Run `self-test` once to confirm Tor routing and rollback behavior.
+3. Use `start` when you actually want an anonymized session.
+4. Use `stop` when you are done.
+
+The easiest way to do this is the included menu launcher:
+
+```bash
+./Freaky\ Sams\ Private\ Time.command
+```
 
 ## What it does
 
@@ -24,6 +65,9 @@ A macOS anonymity helper that routes network traffic through Tor using stricter 
 ## Files
 
 - Main script: `bin/freaky-sams-private-time.sh`
+- ZIP-friendly installer: `Install Freaky Sams Private Time.command`
+- GitHub installer: `install-from-github.sh`
+- Standard installer: `install.sh`
 - Menu launcher: `Freaky Sams Private Time.command`
 - macOS app builder: `build_macos_app.sh`
 - Local state snapshot: `~/.freaky-sams-private-time/proxy_state.tsv`
@@ -37,11 +81,13 @@ A macOS anonymity helper that routes network traffic through Tor using stricter 
 ## Usage
 
 ```bash
-cd freaky_sams_private_time
-chmod +x bin/freaky-sams-private-time.sh
+cd freakySam-sPrivateTime
 
-# One-time dependency install
-./bin/freaky-sams-private-time.sh install
+# One-time setup
+./install.sh
+
+# Open the interactive menu
+./Freaky\ Sams\ Private\ Time.command
 
 # Diagnostics
 ./bin/freaky-sams-private-time.sh doctor
@@ -87,12 +133,16 @@ chmod +x bin/freaky-sams-private-time.sh
 # Restore saved hostname values
 ./bin/freaky-sams-private-time.sh restore-hostname
 
-# Optional menu launcher on macOS
-./Freaky\ Sams\ Private\ Time.command
-
 # Optional .app wrapper build on macOS
 ./build_macos_app.sh
 ```
+
+## Everyday Use
+
+- Double-click `Freaky Sams Private Time.command` for the menu-driven version.
+- Run `./bin/freaky-sams-private-time.sh start` before an anonymous session.
+- Run `./bin/freaky-sams-private-time.sh stop` when the session ends.
+- Use `panic-stop` if you want the fastest available rollback.
 
 ## Practical anonymity hardening tips for macOS
 
