@@ -3,11 +3,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS_DIR="$SCRIPT_DIR/assets"
-SOURCE_SVG="$ASSETS_DIR/freaky-sams-private-time-icon.svg"
-OUTPUT_ICNS="$ASSETS_DIR/FreakySamsPrivateTime.icns"
+SOURCE_SVG="$ASSETS_DIR/amazing-sams-private-time-icon.svg"
+OUTPUT_ICNS="$ASSETS_DIR/AmazingSamsPrivateTime.icns"
 TMP_DIR="$(mktemp -d)"
 PNG_PATH="$TMP_DIR/source.png"
-ICONSET_DIR="$TMP_DIR/FreakySamsPrivateTime.iconset"
+ICONSET_DIR="$TMP_DIR/AmazingSamsPrivateTime.iconset"
 
 cleanup() {
   rm -rf "$TMP_DIR"

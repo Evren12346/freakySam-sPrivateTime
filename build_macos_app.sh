@@ -2,13 +2,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_NAME="Freaky Sams Private Time"
+APP_NAME="Amazing Sams Private Time"
 APP_PATH="$SCRIPT_DIR/${APP_NAME}.app"
-COMMAND_PATH="$SCRIPT_DIR/Freaky Sams Private Time.command"
+COMMAND_PATH="$SCRIPT_DIR/Amazing Sams Private Time.command"
 HOME_APPLICATIONS_DIR="$HOME/Applications"
 INSTALL_TO_HOME_APPLICATIONS="false"
-ICON_SOURCE_PATH="$SCRIPT_DIR/assets/freaky-sams-private-time-icon.svg"
-ICON_FILE_NAME="FreakySamsPrivateTime.icns"
+ICON_SOURCE_PATH="$SCRIPT_DIR/assets/amazing-sams-private-time-icon.svg"
+ICON_FILE_NAME="AmazingSamsPrivateTime.icns"
 ICON_DEST_PATH="$APP_PATH/Contents/Resources/$ICON_FILE_NAME"
 
 if [[ "${1:-}" == "--install-to-home-applications" ]]; then
