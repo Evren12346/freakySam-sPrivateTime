@@ -23,6 +23,15 @@ fi
 if [[ -f "$SCRIPT_DIR/install-from-github.sh" ]]; then
 	chmod +x "$SCRIPT_DIR/install-from-github.sh"
 fi
+if [[ -f "$SCRIPT_DIR/generate_macos_icon.sh" ]]; then
+	chmod +x "$SCRIPT_DIR/generate_macos_icon.sh"
+fi
+if [[ -f "$SCRIPT_DIR/package_macos_release.sh" ]]; then
+	chmod +x "$SCRIPT_DIR/package_macos_release.sh"
+fi
+if [[ -f "$SCRIPT_DIR/real_macos_smoke_test.sh" ]]; then
+	chmod +x "$SCRIPT_DIR/real_macos_smoke_test.sh"
+fi
 chmod +x "$SCRIPT_DIR/build_macos_app.sh"
 
 clear_quarantine "$SCRIPT_DIR/Freaky Sams Private Time.command"

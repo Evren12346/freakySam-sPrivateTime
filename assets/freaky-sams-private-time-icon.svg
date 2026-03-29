@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title>Freaky Sam's Private Time icon</title>
+  <desc>Shield and routed-network icon for the macOS privacy tool.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
+  <circle cx="512" cy="512" r="320" fill="#08111f" opacity="0.45"/>
+  <path d="M512 186c112 79 210 99 272 106 7 277-55 431-272 546-217-115-279-269-272-546 62-7 160-27 272-106Z" fill="url(#shield)"/>
+  <path d="M328 510c63-92 126-138 184-138 67 0 112 28 184 102" fill="none" stroke="#08111f" stroke-width="54" stroke-linecap="round"/>
+  <path d="M346 604c66-86 119-124 166-124 58 0 99 21 166 84" fill="none" stroke="#fff7ed" stroke-width="34" stroke-linecap="round"/>
+  <circle cx="385" cy="623" r="34" fill="#fff7ed"/>
+  <circle cx="639" cy="538" r="34" fill="#fff7ed"/>
+  <path d="M420 742h204" stroke="#fff7ed" stroke-width="42" stroke-linecap="round"/>
+  <path d="M512 252v82" stroke="#fff7ed" stroke-width="36" stroke-linecap="round"/>
+</svg>

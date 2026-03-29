@@ -52,6 +52,8 @@ The installer also tries to create:
 - `~/Applications/Freaky Sams Private Time.app` for Finder and Launchpad use
 - `~/Applications/Freaky Sams Private Time` as the installed project folder for the GitHub installer path
 
+The repo also includes a real-Mac smoke test runner and a packaging script for signed/notarized release builds.
+
 If macOS blocks a downloaded launcher or app on first use, right-click it and choose `Open` once.
 
 ## What it does
@@ -81,6 +83,11 @@ If macOS blocks a downloaded launcher or app on first use, right-click it and ch
 - Standard installer: `install.sh`
 - Menu launcher: `Freaky Sams Private Time.command`
 - macOS app builder: `build_macos_app.sh`
+- Icon generator: `generate_macos_icon.sh`
+- Release packager: `package_macos_release.sh`
+- Real-Mac smoke test: `real_macos_smoke_test.sh`
+- Real-Mac smoke test guide: `REAL_MAC_SMOKE_TEST.md`
+- Icon source: `assets/freaky-sams-private-time-icon.svg`
 - Local state snapshot: `~/.freaky-sams-private-time/proxy_state.tsv`
 
 ## Requirements
@@ -149,6 +156,12 @@ open ~/Applications/Freaky\ Sams\ Private\ Time.app
 
 # Optional .app wrapper build on macOS
 ./build_macos_app.sh
+
+# Optional packaging flow for signed/notarized release builds
+./package_macos_release.sh
+
+# Real-Mac validation run
+./real_macos_smoke_test.sh
 ```
 
 ## Everyday Use
@@ -158,6 +171,32 @@ open ~/Applications/Freaky\ Sams\ Private\ Time.app
 - Run `./bin/freaky-sams-private-time.sh start` before an anonymous session.
 - Run `./bin/freaky-sams-private-time.sh stop` when the session ends.
 - Use `panic-stop` if you want the fastest available rollback.
+
+## Packaging and Release Builds
+
+For a distributable macOS app bundle and zip:
+
+```bash
+./package_macos_release.sh
+```
+
+Optional signing and notarization environment variables:
+
+- `APPLE_SIGN_IDENTITY` for `codesign`
+- `APPLE_NOTARY_PROFILE` for `xcrun notarytool` keychain-profile based notarization
+- or `APPLE_ID`, `APPLE_TEAM_ID`, and `APPLE_APP_SPECIFIC_PASSWORD` for direct notarization credentials
+
+The packaging script builds the app, applies the custom icon if available, optionally signs it, zips it, writes a SHA-256 checksum, and notarizes/staples when credentials are provided.
+
+## Real Mac Validation
+
+This Linux workspace cannot execute the true macOS networking path directly, so the repo now includes a ready-to-run real-Mac validation path:
+
+```bash
+./real_macos_smoke_test.sh
+```
+
+See `REAL_MAC_SMOKE_TEST.md` for what it checks and what still needs manual confirmation.
 
 ## Practical anonymity hardening tips for macOS
 
