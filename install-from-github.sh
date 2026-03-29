@@ -3,11 +3,12 @@ set -euo pipefail
 
 REPO_OWNER="Evren12346"
 REPO_NAME="freakySam-sPrivateTime"
-REPO_REF="${FREAKY_INSTALL_REF:-main}"
 INSTALL_DIR="${FREAKY_INSTALL_DIR:-$HOME/Applications/Freaky Sams Private Time}"
 TMP_DIR="$(mktemp -d)"
 PAYLOAD_DIR="$TMP_DIR/payload"
-ARCHIVE_URL="https://codeload.github.com/${REPO_OWNER}/${REPO_NAME}/tar.gz/refs/heads/${REPO_REF}"
+REPO_API_URL="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}"
+REPO_REF=""
+ARCHIVE_URL=""
 
 cleanup() {
 	rm -rf "$TMP_DIR"
@@ -32,6 +33,33 @@ require_cmd() {
 require_macos
 require_cmd curl
 require_cmd tar
+
+resolve_release_ref() {
+	local requested_ref="${FREAKY_INSTALL_REF:-}"
+	local release_json latest_tag
+	if [[ -n "$requested_ref" ]]; then
+		REPO_REF="$requested_ref"
+		return 0
+	fi
+	release_json="$(curl -fsSL "$REPO_API_URL/releases/latest" 2>/dev/null || true)"
+	latest_tag="$(printf '%s' "$release_json" | sed -n 's/.*"tag_name":[[:space:]]*"\([^"]*\)".*/\1/p' | head -n 1)"
+	if [[ -n "$latest_tag" ]]; then
+		REPO_REF="$latest_tag"
+		return 0
+	fi
+	REPO_REF="main"
+}
+
+build_archive_url() {
+	if [[ "$REPO_REF" =~ ^v[0-9] ]]; then
+		ARCHIVE_URL="https://codeload.github.com/${REPO_OWNER}/${REPO_NAME}/tar.gz/refs/tags/${REPO_REF}"
+	else
+		ARCHIVE_URL="https://codeload.github.com/${REPO_OWNER}/${REPO_NAME}/tar.gz/refs/heads/${REPO_REF}"
+	fi
+}
+
+resolve_release_ref
+build_archive_url
 
 mkdir -p "$PAYLOAD_DIR"
 
@@ -64,6 +92,10 @@ echo "Installing dependencies and preparing launchers in: $INSTALL_DIR"
 
 echo
 echo "Installed successfully."
+echo "Installed version/ref: $REPO_REF"
+if [[ -d "$HOME/Applications/Freaky Sams Private Time.app" ]]; then
+	echo "Launchpad-ready app: $HOME/Applications/Freaky Sams Private Time.app"
+fi
 echo "Menu launcher: $INSTALL_DIR/Freaky Sams Private Time.command"
 echo "Interactive commands: $INSTALL_DIR/bin/freaky-sams-private-time.sh"
 echo "If macOS warns about opening a downloaded launcher, right-click it and choose Open once."
