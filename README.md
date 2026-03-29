@@ -80,7 +80,27 @@ If macOS blocks a downloaded launcher or app on first use, right-click it and ch
 - Can launch Tor Browser with safety reminders (`open-tor-browser` command)
 - Restores your prior proxy settings and stops Tor (`stop` command)
 
-## Files
+## Native macOS App (SwiftUI)
+
+For a beautiful, native macOS experience with a modern GUI:
+
+```bash
+cd macos-app
+./build.sh
+# Or open in Xcode:
+open SiOrNoGoobledygook.xcodeproj
+```
+
+The native app includes:
+- **Beautiful Dashboard**: Modern dark-themed interface
+- **One-Click Controls**: Start/Stop Tor easily
+- **Quick Actions**: Diagnostics, testing, privacy reports
+- **Live Output**: Real-time command output display
+- **System Integration**: Dock icon, proper macOS app lifecycle
+
+See [macos-app/README.md](macos-app/README.md) for detailed build and installation instructions.
+
+## Command-Line Files
 
 - Main script: `bin/si_or_no_goobledygook.sh`
 - ZIP-friendly installer: `Install Si Or No Goobledygook.command`
