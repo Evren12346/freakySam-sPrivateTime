@@ -1,0 +1,127 @@
+# freaky sam's private time
+
+A macOS anonymity helper that routes network traffic through Tor using stricter macOS proxy hardening.
+
+## What it does
+
+- Installs Tor tooling with Homebrew (`install` command)
+- Runs a local diagnostics pass (`doctor` command)
+- Reports host identity values that may leak personal information (`privacy-report`)
+- Prints Tor proxy environment exports for proxy-aware apps (`tor-env`)
+- Starts Tor as a background service (`start` command)
+- Saves current macOS SOCKS, HTTP, HTTPS, auto-proxy, auto-discovery, and bypass-domain state
+- Disables proxy auto-config and bypass domains while active
+- Enables SOCKS proxy routing to Tor (`127.0.0.1:9050`) on all services
+- Tests direct IP vs Tor IP and checks the Tor Project API (`test` command)
+- Adds a one-shot verification flow (`self-test` command)
+- Adds a fast rollback path (`panic-stop` command)
+- Can temporarily replace local host identity values with a generic label (`cloak-hostname` / `restore-hostname`)
+- Prints a built-in leak-risk checklist (`checklist` command)
+- Lists and launches curated safer app profiles (`safe-apps` and `launch-safe-app`)
+- Can launch Tor Browser with safety reminders (`open-tor-browser` command)
+- Restores your prior proxy settings and stops Tor (`stop` command)
+
+## Files
+
+- Main script: `bin/freaky-sams-private-time.sh`
+- Menu launcher: `Freaky Sams Private Time.command`
+- macOS app builder: `build_macos_app.sh`
+- Local state snapshot: `~/.freaky-sams-private-time/proxy_state.tsv`
+
+## Requirements
+
+- macOS
+- Homebrew
+- Administrator privileges may be required for `cloak-hostname` and `restore-hostname`
+
+## Usage
+
+```bash
+cd freaky_sams_private_time
+chmod +x bin/freaky-sams-private-time.sh
+
+# One-time dependency install
+./bin/freaky-sams-private-time.sh install
+
+# Diagnostics
+./bin/freaky-sams-private-time.sh doctor
+
+# Review local host identity exposure
+./bin/freaky-sams-private-time.sh privacy-report
+
+# Print Tor proxy environment variables for proxy-aware apps
+./bin/freaky-sams-private-time.sh tor-env
+
+# Replace local hostname values with a generic label
+./bin/freaky-sams-private-time.sh cloak-hostname anon-mac
+
+# Enable Tor routing
+./bin/freaky-sams-private-time.sh start
+
+# Check status and verify
+./bin/freaky-sams-private-time.sh status
+./bin/freaky-sams-private-time.sh test
+
+# Run the full guided verification flow
+./bin/freaky-sams-private-time.sh self-test
+
+# Ask Tor for a new circuit
+./bin/freaky-sams-private-time.sh newnym
+
+# Print leak-risk checklist
+./bin/freaky-sams-private-time.sh checklist
+
+# List and launch curated safer app profiles
+./bin/freaky-sams-private-time.sh safe-apps
+./bin/freaky-sams-private-time.sh launch-safe-app tor-browser
+
+# Launch Tor Browser with reminders
+./bin/freaky-sams-private-time.sh open-tor-browser
+
+# Restore normal state
+./bin/freaky-sams-private-time.sh stop
+
+# Fast emergency rollback
+./bin/freaky-sams-private-time.sh panic-stop
+
+# Restore saved hostname values
+./bin/freaky-sams-private-time.sh restore-hostname
+
+# Optional menu launcher on macOS
+./Freaky\ Sams\ Private\ Time.command
+
+# Optional .app wrapper build on macOS
+./build_macos_app.sh
+```
+
+## Practical anonymity hardening tips for macOS
+
+- Use a dedicated browser profile for anonymous sessions only.
+- Prefer Tor Browser for web sessions if you have it installed.
+- Disable cloud account sync while anonymized.
+- Do not log into personal accounts from the anonymous session.
+- Disable location services for apps used during anonymized sessions.
+- Keep macOS and browser fully updated.
+- Prefer privacy-focused DNS and avoid unnecessary background apps.
+
+## What the upgrade improves
+
+- Restores more of your original macOS proxy state after shutdown.
+- Clears proxy bypass domains while active to reduce accidental direct connections.
+- Disables proxy auto-discovery and PAC settings while active to avoid conflicting proxy behavior.
+- Adds a `doctor` command to catch missing dependencies and risky proxy settings early.
+- Adds Tor Project API verification in `test`.
+- Adds `self-test` to start the profile, verify routing, and restore settings in one command.
+- Adds `panic-stop` for a faster emergency rollback path.
+- Adds a host identity report, Tor env export helper, and reversible hostname cloaking.
+- Adds a clearer leak-risk checklist and a curated safer-app launcher mode.
+- Adds a macOS `.command` menu launcher and a `.app` builder script.
+- Adds a Tor Browser launcher helper with session safety reminders.
+
+## Important caveat
+
+No software can guarantee complete anonymity. Browser fingerprinting, account logins, endpoint compromise, and behavior patterns can still reveal identity.
+
+## Validation note
+
+The command logic has been syntax-checked and exercised through mocked macOS command flows from this workspace, but final validation still needs to be run on a real Mac against actual `networksetup`, `scutil`, Tor, and Homebrew services.
