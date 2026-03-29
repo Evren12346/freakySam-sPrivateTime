@@ -2,13 +2,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_NAME="Gobbledygook"
+APP_NAME="Si Or No Goobledygook"
 APP_PATH="$SCRIPT_DIR/${APP_NAME}.app"
-COMMAND_PATH="$SCRIPT_DIR/Gobbledygook.command"
+COMMAND_PATH="$SCRIPT_DIR/Si Or No Goobledygook.command"
 HOME_APPLICATIONS_DIR="$HOME/Applications"
 INSTALL_TO_HOME_APPLICATIONS="false"
-ICON_SOURCE_PATH="$SCRIPT_DIR/assets/gobbledygook-icon.svg"
-ICON_FILE_NAME="Gobbledygook.icns"
+ICON_SOURCE_PATH="$SCRIPT_DIR/assets/si_or_no_goobledygook-icon.svg"
+ICON_FILE_NAME="SiOrNoGoobledygook.icns"
 ICON_DEST_PATH="$APP_PATH/Contents/Resources/$ICON_FILE_NAME"
 
 if [[ "${1:-}" == "--install-to-home-applications" ]]; then

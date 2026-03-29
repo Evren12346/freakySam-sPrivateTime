@@ -5,7 +5,7 @@ Use this on an actual Mac to validate the project against real `networksetup`, `
 ## Quick Run
 
 ```bash
-cd gobbledygook
+cd si-or-no-goobledygook
 ./real_macos_smoke_test.sh
 ```
 
@@ -21,7 +21,7 @@ The script will:
 
 ## What to check manually after the script
 
-- Confirm the app opens from `~/Applications/Gobbledygook.app`
+- Confirm the app opens from `~/Applications/Si Or No Goobledygook.app`
 - Confirm Tor Browser launch works if Tor Browser is installed
 - Confirm system proxy settings are restored after `stop`
 - Confirm Gatekeeper only needs a one-time `Open` flow if macOS prompts

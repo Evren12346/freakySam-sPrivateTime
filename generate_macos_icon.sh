@@ -3,11 +3,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS_DIR="$SCRIPT_DIR/assets"
-SOURCE_SVG="$ASSETS_DIR/gobbledygook-icon.svg"
-OUTPUT_ICNS="$ASSETS_DIR/Gobbledygook.icns"
+SOURCE_SVG="$ASSETS_DIR/si_or_no_goobledygook-icon.svg"
+OUTPUT_ICNS="$ASSETS_DIR/SiOrNoGoobledygook.icns"
 TMP_DIR="$(mktemp -d)"
 PNG_PATH="$TMP_DIR/source.png"
-ICONSET_DIR="$TMP_DIR/Gobbledygook.iconset"
+ICONSET_DIR="$TMP_DIR/SiOrNoGoobledygook.iconset"
 
 cleanup() {
   rm -rf "$TMP_DIR"

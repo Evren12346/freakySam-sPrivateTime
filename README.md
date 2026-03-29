@@ -1,4 +1,4 @@
-# Gobbledygook
+# Si Or No Goobledygook
 
 A macOS anonymity helper that routes network traffic through Tor using stricter macOS proxy hardening.
 
@@ -8,32 +8,32 @@ The GitHub repo explains install right here at the top because most users will l
 
 ## Direct ZIP Download
 
-- Latest release ZIP (`v1.2.0`): https://github.com/Evren12346/gobbledygook/archive/refs/tags/v1.2.0.zip
-- Latest main branch ZIP: https://github.com/Evren12346/gobbledygook/archive/refs/heads/main.zip
+- Latest release ZIP (`v1.2.0`): https://github.com/Evren12346/si-or-no-goobledygook/archive/refs/tags/v1.2.0.zip
+- Latest main branch ZIP: https://github.com/Evren12346/si-or-no-goobledygook/archive/refs/heads/main.zip
 
 ### Option 1: GitHub ZIP download
 
 1. Download the repository ZIP from GitHub and unzip it.
 2. Open the unzipped folder.
-3. Double-click `Install Gobbledygook.command`.
+3. Double-click `Install Si Or No Goobledygook.command`.
 4. If macOS blocks the launcher the first time, right-click it and choose `Open`.
-5. After install finishes, double-click `Gobbledygook.command` to use the menu.
+5. After install finishes, double-click `Si Or No Goobledygook.command` to use the menu.
 
 ### Option 2: One-line Terminal install from GitHub
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Evren12346/gobbledygook/main/install-from-github.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-from-github.sh | bash
 ```
 
-This installs the project into `~/Applications/Gobbledygook`, installs dependencies, and prepares the launchers for you.
+This installs the project into `~/Applications/Si Or No Goobledygook`, installs dependencies, and prepares the launchers for you.
 
 The GitHub installer now prefers the latest GitHub release tag when one exists, falls back to `main` if needed, and creates a Launchpad-ready app bundle in `~/Applications`.
 
 ### Option 3: Git clone
 
 ```bash
-git clone https://github.com/Evren12346/gobbledygook.git
-cd gobbledygook
+git clone https://github.com/Evren12346/si-or-no-goobledygook.git
+cd si-or-no-goobledygook
 ./install.sh
 ```
 
@@ -54,8 +54,8 @@ The easiest way to do this is the included menu launcher:
 
 The installer also tries to create:
 
-- `~/Applications/Gobbledygook.app` for Finder and Launchpad use
-- `~/Applications/Gobbledygook` as the installed project folder for the GitHub installer path
+- `~/Applications/Si Or No Goobledygook.app` for Finder and Launchpad use
+- `~/Applications/Si Or No Goobledygook` as the installed project folder for the GitHub installer path
 
 The repo also includes a real-Mac smoke test runner and a packaging script for signed/notarized release builds.
 
@@ -82,18 +82,18 @@ If macOS blocks a downloaded launcher or app on first use, right-click it and ch
 
 ## Files
 
-- Main script: `bin/gobbledygook.sh`
-- ZIP-friendly installer: `Install Gobbledygook.command`
+- Main script: `bin/si_or_no_goobledygook.sh`
+- ZIP-friendly installer: `Install Si Or No Goobledygook.command`
 - GitHub installer: `install-from-github.sh`
 - Standard installer: `install.sh`
-- Menu launcher: `Gobbledygook.command`
+- Menu launcher: `Si Or No Goobledygook.command`
 - macOS app builder: `build_macos_app.sh`
 - Icon generator: `generate_macos_icon.sh`
 - Release packager: `package_macos_release.sh`
 - Real-Mac smoke test: `real_macos_smoke_test.sh`
 - Real-Mac smoke test guide: `REAL_MAC_SMOKE_TEST.md`
-- Icon source: `assets/gobbledygook-icon.svg`
-- Local state snapshot: `~/.gobbledygook/proxy_state.tsv`
+- Icon source: `assets/si_or_no_goobledygook-icon.svg`
+- Local state snapshot: `~/.si_or_no_goobledygook/proxy_state.tsv`
 
 ## Requirements
 
@@ -104,48 +104,48 @@ If macOS blocks a downloaded launcher or app on first use, right-click it and ch
 ## Usage
 
 ```bash
-cd gobbledygook
+cd si-or-no-goobledygook
 
 # One-time setup
 ./install.sh
 
 # Open the interactive menu
-./Gobbledygook.command
+./Si\ Or\ No\ Goobledygook.command
 
 # Or launch the installed app bundle if it was created in ~/Applications
-open ~/Applications/Gobbledygook.app
+open ~/Applications/Si\ Or\ No\ Goobledygook.app
 
 # Diagnostics
-./bin/gobbledygook.sh doctor
+./bin/si_or_no_goobledygook.sh doctor
 
 # Review local host identity exposure
-./bin/gobbledygook.sh privacy-report
+./bin/si_or_no_goobledygook.sh privacy-report
 
 # Print Tor proxy environment variables for proxy-aware apps
-./bin/gobbledygook.sh tor-env
+./bin/si_or_no_goobledygook.sh tor-env
 
 # Replace local hostname values with a generic label
-./bin/gobbledygook.sh cloak-hostname anon-mac
+./bin/si_or_no_goobledygook.sh cloak-hostname anon-mac
 
 # Enable Tor routing
-./bin/gobbledygook.sh start
+./bin/si_or_no_goobledygook.sh start
 
 # Check status and verify
-./bin/gobbledygook.sh status
-./bin/gobbledygook.sh test
+./bin/si_or_no_goobledygook.sh status
+./bin/si_or_no_goobledygook.sh test
 
 # Run the full guided verification flow
-./bin/gobbledygook.sh self-test
+./bin/si_or_no_goobledygook.sh self-test
 
 # Ask Tor for a new circuit
-./bin/gobbledygook.sh newnym
+./bin/si_or_no_goobledygook.sh newnym
 
 # Print leak-risk checklist
-./bin/gobbledygook.sh checklist
+./bin/si_or_no_goobledygook.sh checklist
 
 # List and launch curated safer app profiles
-./bin/gobbledygook.sh safe-apps
-./bin/gobbledygook.sh launch-safe-app tor-browser
+./bin/si_or_no_goobledygook.sh safe-apps
+./bin/si_or_no_goobledygook.sh launch-safe-app tor-browser
 
 # Launch Tor Browser with reminders
 ./bin/freaky-sams-private-time.sh open-tor-browser
