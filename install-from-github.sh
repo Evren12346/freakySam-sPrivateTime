@@ -4,6 +4,7 @@ set -euo pipefail
 REPO_OWNER="Evren12346"
 REPO_NAME="si-or-no-goobledygook"
 INSTALL_DIR="${FREAKY_INSTALL_DIR:-$HOME/Applications/Si Or No Goobledygook}"
+AUTO_LAUNCH="${SI_OR_NO_AUTO_LAUNCH:-1}"
 TMP_DIR="$(mktemp -d)"
 PAYLOAD_DIR="$TMP_DIR/payload"
 REPO_API_URL="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}"
@@ -99,3 +100,10 @@ fi
 echo "Menu launcher: $INSTALL_DIR/Si Or No Goobledygook.command"
 echo "Interactive commands: $INSTALL_DIR/bin/si_or_no_goobledygook.sh"
 echo "If macOS warns about opening a downloaded launcher, right-click it and choose Open once."
+
+if [[ "$AUTO_LAUNCH" == "1" ]]; then
+	echo
+	echo "Opening the menu launcher now..."
+	open "$INSTALL_DIR/Si Or No Goobledygook.command" || true
+	echo "Tip: disable auto-launch with SI_OR_NO_AUTO_LAUNCH=0"
+fi

@@ -9,10 +9,18 @@ The GitHub repo explains install right here at the top because most users will l
 ## GitHub Quick Start (Copy/Paste)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-from-github.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-mac.sh | bash
 ```
 
-Then launch:
+This installs everything and auto-opens the menu launcher.
+
+If you prefer no auto-open:
+
+```bash
+SI_OR_NO_AUTO_LAUNCH=0 curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-from-github.sh | bash
+```
+
+Manual launch (any time):
 
 ```bash
 ~/Applications/Si\ Or\ No\ Goobledygook/Si\ Or\ No\ Goobledygook.command
@@ -34,10 +42,10 @@ Then launch:
 ### Option 2: One-line Terminal install from GitHub
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-from-github.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-mac.sh | bash
 ```
 
-This installs the project into `~/Applications/Si Or No Goobledygook`, installs dependencies, and prepares the launchers for you.
+This installs the project into `~/Applications/Si Or No Goobledygook`, installs dependencies, prepares the launchers, and opens the menu automatically.
 
 The GitHub installer now prefers the latest GitHub release tag when one exists, falls back to `main` if needed, and creates a Launchpad-ready app bundle in `~/Applications`.
 
