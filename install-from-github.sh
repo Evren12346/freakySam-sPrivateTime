@@ -2,8 +2,8 @@
 set -euo pipefail
 
 REPO_OWNER="Evren12346"
-REPO_NAME="amazingSam-sPrivateTime"
-INSTALL_DIR="${FREAKY_INSTALL_DIR:-$HOME/Applications/Amazing Sams Private Time}"
+REPO_NAME="gobbledygook"
+INSTALL_DIR="${FREAKY_INSTALL_DIR:-$HOME/Applications/Gobbledygook}"
 TMP_DIR="$(mktemp -d)"
 PAYLOAD_DIR="$TMP_DIR/payload"
 REPO_API_URL="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}"
@@ -82,10 +82,10 @@ fi
 mv "$EXTRACTED_DIR" "$INSTALL_DIR"
 
 chmod +x "$INSTALL_DIR/install.sh"
-chmod +x "$INSTALL_DIR/Amazing Sams Private Time.command"
-chmod +x "$INSTALL_DIR/Install Amazing Sams Private Time.command"
+chmod +x "$INSTALL_DIR/Gobbledygook.command"
+chmod +x "$INSTALL_DIR/Install Gobbledygook.command"
 chmod +x "$INSTALL_DIR/build_macos_app.sh"
-chmod +x "$INSTALL_DIR/bin/amazing-sams-private-time.sh"
+chmod +x "$INSTALL_DIR/bin/gobbledygook.sh"
 
 echo "Installing dependencies and preparing launchers in: $INSTALL_DIR"
 "$INSTALL_DIR/install.sh"
@@ -93,9 +93,9 @@ echo "Installing dependencies and preparing launchers in: $INSTALL_DIR"
 echo
 echo "Installed successfully."
 echo "Installed version/ref: $REPO_REF"
-if [[ -d "$HOME/Applications/Amazing Sams Private Time.app" ]]; then
-	echo "Launchpad-ready app: $HOME/Applications/Amazing Sams Private Time.app"
+if [[ -d "$HOME/Applications/Gobbledygook.app" ]]; then
+	echo "Launchpad-ready app: $HOME/Applications/Gobbledygook.app"
 fi
-echo "Menu launcher: $INSTALL_DIR/Amazing Sams Private Time.command"
-echo "Interactive commands: $INSTALL_DIR/bin/amazing-sams-private-time.sh"
+echo "Menu launcher: $INSTALL_DIR/Gobbledygook.command"
+echo "Interactive commands: $INSTALL_DIR/bin/gobbledygook.sh"
 echo "If macOS warns about opening a downloaded launcher, right-click it and choose Open once."

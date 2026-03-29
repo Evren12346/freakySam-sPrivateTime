@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_NAME="Amazing Sams Private Time"
+APP_NAME="Gobbledygook"
 APP_PATH="$SCRIPT_DIR/${APP_NAME}.app"
 DIST_DIR="$SCRIPT_DIR/dist"
 ZIP_PATH="$DIST_DIR/${APP_NAME}.zip"

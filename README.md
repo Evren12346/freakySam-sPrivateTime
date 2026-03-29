@@ -1,4 +1,4 @@
-# Amazing Sam's Private Time
+# Gobbledygook
 
 A macOS anonymity helper that routes network traffic through Tor using stricter macOS proxy hardening.
 
@@ -8,32 +8,32 @@ The GitHub repo explains install right here at the top because most users will l
 
 ## Direct ZIP Download
 
-- Latest release ZIP (`v1.2.0`): https://github.com/Evren12346/amazingSam-sPrivateTime/archive/refs/tags/v1.2.0.zip
-- Latest main branch ZIP: https://github.com/Evren12346/amazingSam-sPrivateTime/archive/refs/heads/main.zip
+- Latest release ZIP (`v1.2.0`): https://github.com/Evren12346/gobbledygook/archive/refs/tags/v1.2.0.zip
+- Latest main branch ZIP: https://github.com/Evren12346/gobbledygook/archive/refs/heads/main.zip
 
 ### Option 1: GitHub ZIP download
 
 1. Download the repository ZIP from GitHub and unzip it.
 2. Open the unzipped folder.
-3. Double-click `Install Amazing Sams Private Time.command`.
+3. Double-click `Install Gobbledygook.command`.
 4. If macOS blocks the launcher the first time, right-click it and choose `Open`.
-5. After install finishes, double-click `Amazing Sams Private Time.command` to use the menu.
+5. After install finishes, double-click `Gobbledygook.command` to use the menu.
 
 ### Option 2: One-line Terminal install from GitHub
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Evren12346/amazingSam-sPrivateTime/main/install-from-github.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/gobbledygook/main/install-from-github.sh | bash
 ```
 
-This installs the project into `~/Applications/Amazing Sams Private Time`, installs dependencies, and prepares the launchers for you.
+This installs the project into `~/Applications/Gobbledygook`, installs dependencies, and prepares the launchers for you.
 
 The GitHub installer now prefers the latest GitHub release tag when one exists, falls back to `main` if needed, and creates a Launchpad-ready app bundle in `~/Applications`.
 
 ### Option 3: Git clone
 
 ```bash
-git clone https://github.com/Evren12346/amazingSam-sPrivateTime.git
-cd amazingSam-sPrivateTime
+git clone https://github.com/Evren12346/gobbledygook.git
+cd gobbledygook
 ./install.sh
 ```
 
@@ -54,8 +54,8 @@ The easiest way to do this is the included menu launcher:
 
 The installer also tries to create:
 
-- `~/Applications/Amazing Sams Private Time.app` for Finder and Launchpad use
-- `~/Applications/Amazing Sams Private Time` as the installed project folder for the GitHub installer path
+- `~/Applications/Gobbledygook.app` for Finder and Launchpad use
+- `~/Applications/Gobbledygook` as the installed project folder for the GitHub installer path
 
 The repo also includes a real-Mac smoke test runner and a packaging script for signed/notarized release builds.
 
@@ -82,18 +82,18 @@ If macOS blocks a downloaded launcher or app on first use, right-click it and ch
 
 ## Files
 
-- Main script: `bin/amazing-sams-private-time.sh`
-- ZIP-friendly installer: `Install Amazing Sams Private Time.command`
+- Main script: `bin/gobbledygook.sh`
+- ZIP-friendly installer: `Install Gobbledygook.command`
 - GitHub installer: `install-from-github.sh`
 - Standard installer: `install.sh`
-- Menu launcher: `Amazing Sams Private Time.command`
+- Menu launcher: `Gobbledygook.command`
 - macOS app builder: `build_macos_app.sh`
 - Icon generator: `generate_macos_icon.sh`
 - Release packager: `package_macos_release.sh`
 - Real-Mac smoke test: `real_macos_smoke_test.sh`
 - Real-Mac smoke test guide: `REAL_MAC_SMOKE_TEST.md`
-- Icon source: `assets/amazing-sams-private-time-icon.svg`
-- Local state snapshot: `~/.amazing-sams-private-time/proxy_state.tsv`
+- Icon source: `assets/gobbledygook-icon.svg`
+- Local state snapshot: `~/.gobbledygook/proxy_state.tsv`
 
 ## Requirements
 
@@ -104,48 +104,48 @@ If macOS blocks a downloaded launcher or app on first use, right-click it and ch
 ## Usage
 
 ```bash
-cd amazingSam-sPrivateTime
+cd gobbledygook
 
 # One-time setup
 ./install.sh
 
 # Open the interactive menu
-./Amazing\ Sams\ Private\ Time.command
+./Gobbledygook.command
 
 # Or launch the installed app bundle if it was created in ~/Applications
-open ~/Applications/Amazing\ Sams\ Private\ Time.app
+open ~/Applications/Gobbledygook.app
 
 # Diagnostics
-./bin/amazing-sams-private-time.sh doctor
+./bin/gobbledygook.sh doctor
 
 # Review local host identity exposure
-./bin/amazing-sams-private-time.sh privacy-report
+./bin/gobbledygook.sh privacy-report
 
 # Print Tor proxy environment variables for proxy-aware apps
-./bin/amazing-sams-private-time.sh tor-env
+./bin/gobbledygook.sh tor-env
 
 # Replace local hostname values with a generic label
-./bin/amazing-sams-private-time.sh cloak-hostname anon-mac
+./bin/gobbledygook.sh cloak-hostname anon-mac
 
 # Enable Tor routing
-./bin/amazing-sams-private-time.sh start
+./bin/gobbledygook.sh start
 
 # Check status and verify
-./bin/amazing-sams-private-time.sh status
-./bin/amazing-sams-private-time.sh test
+./bin/gobbledygook.sh status
+./bin/gobbledygook.sh test
 
 # Run the full guided verification flow
-./bin/amazing-sams-private-time.sh self-test
+./bin/gobbledygook.sh self-test
 
 # Ask Tor for a new circuit
-./bin/amazing-sams-private-time.sh newnym
+./bin/gobbledygook.sh newnym
 
 # Print leak-risk checklist
-./bin/amazing-sams-private-time.sh checklist
+./bin/gobbledygook.sh checklist
 
 # List and launch curated safer app profiles
-./bin/amazing-sams-private-time.sh safe-apps
-./bin/amazing-sams-private-time.sh launch-safe-app tor-browser
+./bin/gobbledygook.sh safe-apps
+./bin/gobbledygook.sh launch-safe-app tor-browser
 
 # Launch Tor Browser with reminders
 ./bin/freaky-sams-private-time.sh open-tor-browser
