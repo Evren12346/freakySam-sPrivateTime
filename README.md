@@ -6,6 +6,11 @@ A macOS anonymity helper that routes network traffic through Tor using stricter 
 
 The GitHub repo explains install right here at the top because most users will land on this page first.
 
+## Direct ZIP Download
+
+- Latest release ZIP (`v1.2.0`): https://github.com/Evren12346/freakySam-sPrivateTime/archive/refs/tags/v1.2.0.zip
+- Latest main branch ZIP: https://github.com/Evren12346/freakySam-sPrivateTime/archive/refs/heads/main.zip
+
 ### Option 1: GitHub ZIP download
 
 1. Download the repository ZIP from GitHub and unzip it.
