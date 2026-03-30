@@ -23,7 +23,7 @@ Usage:
 	macbook-anonymizer.sh doctor
 	macbook-anonymizer.sh start
 	macbook-anonymizer.sh stop
-	macbook-anonymizer.sh panic-stop
+	macbook-anonymizer.sh panic-stop [--force]
 	macbook-anonymizer.sh status
 	macbook-anonymizer.sh test
 	macbook-anonymizer.sh self-test
@@ -46,7 +46,7 @@ Commands:
 	stop     Restore previous proxy settings and stop tor service.
 	panic-stop
 	         Force a fast rollback: disable active proxy paths on all services, restore saved state when
-	         available, and stop tor immediately.
+	         available, and stop tor immediately. Prompts for confirmation unless --force is used.
 	status   Show tor and system proxy state.
 	test     Compare direct IP vs Tor-routed IP and query the Tor Project API.
 	self-test
@@ -89,6 +89,21 @@ require_cmd() {
 		echo "Missing required command: $cmd"
 		exit 1
 	fi
+}
+
+confirm_panic_stop() {
+	local answer=""
+	if [[ "${MACBOOK_ANONYMIZER_ASSUME_YES:-0}" == "1" ]]; then
+		return 0
+	fi
+	if [[ ! -t 0 ]]; then
+		echo "Refusing panic-stop in non-interactive mode without --force."
+		echo "Use: $0 panic-stop --force"
+		return 1
+	fi
+	echo "WARNING: panic-stop performs immediate network rollback operations."
+	read -r -p "Type YES to continue: " answer
+	[[ "$answer" == "YES" ]]
 }
 
 require_privileged_access() {
@@ -597,6 +612,20 @@ cmd_stop() {
 cmd_panic_stop() {
 	require_macos
 	require_cmd networksetup
+	local force_mode="0"
+	if [[ "${1:-}" == "--force" ]]; then
+		force_mode="1"
+	elif [[ -n "${1:-}" ]]; then
+		echo "Unknown option for panic-stop: $1"
+		echo "Usage: $0 panic-stop [--force]"
+		exit 1
+	fi
+	if [[ "$force_mode" != "1" ]]; then
+		if ! confirm_panic_stop; then
+			echo "Panic stop cancelled."
+			exit 1
+		fi
+	fi
 
 	echo "Panic stop: disabling proxy paths immediately..."
 	disable_all_proxy_paths
@@ -883,7 +912,10 @@ main() {
 		doctor) cmd_doctor ;;
 		start) cmd_start ;;
 		stop) cmd_stop ;;
-		panic-stop) cmd_panic_stop ;;
+		panic-stop)
+			shift || true
+			cmd_panic_stop "$@"
+			;;
 		status) cmd_status ;;
 		test) cmd_test ;;
 		self-test) cmd_self_test ;;

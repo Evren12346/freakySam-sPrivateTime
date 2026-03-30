@@ -196,6 +196,9 @@ open ~/Applications/Si\ Or\ No\ Goobledygook.app
 # Fast emergency rollback
 ./bin/macbook_anonymizer.sh panic-stop
 
+# Non-interactive emergency rollback (CI/automation)
+./bin/macbook_anonymizer.sh panic-stop --force
+
 # Restore saved hostname values
 ./bin/macbook_anonymizer.sh restore-hostname
 
