@@ -2,21 +2,21 @@
 import PackageDescription
 
 let package = Package(
-    name: "SiOrNoGoobledygook",
+    name: "MacBookAnonymizer",
     platforms: [
         .macOS(.v12)
     ],
     products: [
         .executable(
-            name: "SiOrNoGoobledygook",
-            targets: ["SiOrNoGoobledygook"]
+            name: "MacBookAnonymizer",
+            targets: ["MacBookAnonymizer"]
         ),
     ],
     targets: [
         .executableTarget(
-            name: "SiOrNoGoobledygook",
+            name: "MacBookAnonymizer",
             dependencies: [],
-            path: "SiOrNoGoobledygook"
+            path: "MacBookAnonymizer"
         ),
     ]
 )

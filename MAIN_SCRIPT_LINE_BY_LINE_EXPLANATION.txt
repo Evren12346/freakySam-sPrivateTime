@@ -1,0 +1,2022 @@
+MacBook Anonymizer
+Main script literal walkthrough
+File covered: bin/macbook_anonymizer.sh
+
+Purpose of this document
+- This file is meant to be read next to the source.
+- It follows the script from top to bottom in source order.
+- For executable logic, each meaningful line is called out directly.
+- Blank lines are skipped because they do not affect runtime behavior.
+- The one major exception is the big help-text here-document inside usage(); that block is mostly static text,
+  so it is described as printed output instead of pretending each printed text line has separate program logic.
+
+Legacy naming note
+- The current repo name is MacBook Anonymizer.
+- The script still contains older internal names such as "macbook anonymizer" and ~/.macbook-anonymizer.
+- That does not change the flow of the code, but it does mean some printed labels and state paths still use the older name.
+
+Literal walkthrough
+
+Line 1
+- `#!/usr/bin/env bash` tells the operating system to run the file with Bash resolved through env.
+
+Line 2
+- `set -euo pipefail` enables strict shell behavior so failures are surfaced instead of silently ignored.
+
+Line 4
+- Defines `TOOL_NAME` as the human-readable label used in printed messages.
+
+Line 5
+- Defines `STATE_DIR`, the directory where proxy state snapshots are stored.
+
+Line 6
+- Defines `STATE_FILE`, the tab-separated file that stores saved proxy settings.
+
+Line 7
+- Defines `IDENTITY_STATE_FILE`, the tab-separated file that stores saved hostname identity values.
+
+Line 8
+- Defines `TOR_SOCKS_HOST` as `127.0.0.1`, meaning Tor traffic is expected through the local machine.
+
+Line 9
+- Defines `TOR_SOCKS_PORT` as `9050`, the default Tor SOCKS port.
+
+Line 10
+- Defines `TOR_CHECK_URL`, the Tor Project API endpoint used to confirm whether traffic is exiting through Tor.
+
+Line 11
+- Defines `IP_CHECK_URL`, the plain public-IP endpoint used for direct-vs-Tor IP comparison.
+
+Line 12
+- Defines `APP_SEARCH_ROOTS_DEFAULT`, a colon-separated list of app search roots used later when launching safer apps.
+
+Line 14
+- Begins the `usage()` function.
+
+Line 15
+- Starts a single-quoted here-document, which means the help text is emitted literally with no variable expansion.
+
+Lines 16-72
+- This whole block is printed help text.
+- Lines 18-36 list the accepted commands.
+- Lines 38-68 describe what each command is meant to do.
+- Lines 70-72 print the anonymity warning.
+
+Line 73
+- Ends the here-document.
+
+Line 74
+- Ends the `usage()` function.
+
+Line 76
+- Begins `require_macos()`.
+
+Line 77
+- Compares `uname -s` to `Darwin`.
+
+Line 78
+- Prints a message if the script is not running on macOS.
+
+Line 79
+- Exits with failure when the platform check fails.
+
+Line 80
+- Closes the `if` block in `require_macos()`.
+
+Line 81
+- Ends the `require_macos()` function.
+
+Line 83
+- Begins `require_cmd()`.
+
+Line 84
+- Stores the requested command name in a local variable named `cmd`.
+
+Line 85
+- Checks whether the requested command exists in `PATH`.
+
+Line 86
+- Prints the missing command name if it is not found.
+
+Line 87
+- Exits with failure if the command does not exist.
+
+Line 88
+- Closes the `if` block in `require_cmd()`.
+
+Line 89
+- Ends `require_cmd()`.
+
+Line 91
+- Begins `require_privileged_access()`.
+
+Line 92
+- Checks whether the effective user ID is already root.
+
+Line 93
+- Returns success immediately if already root.
+
+Line 94
+- Closes the first `if` block.
+
+Line 95
+- Checks whether `sudo` exists.
+
+Line 96
+- Runs `sudo -v` to refresh or prompt for cached credentials.
+
+Line 97
+- Returns success after `sudo` credentials are available.
+
+Line 98
+- Closes the `sudo` check.
+
+Line 99
+- Prints an error if privileged access is required but `sudo` is unavailable.
+
+Line 100
+- Exits with failure in that case.
+
+Line 101
+- Ends `require_privileged_access()`.
+
+Line 103
+- Begins `run_privileged()`.
+
+Line 104
+- Checks whether the script is already running as root.
+
+Line 105
+- Executes the passed command directly when already root.
+
+Line 106
+- Starts the non-root branch.
+
+Line 107
+- Executes the passed command through `sudo` when not root.
+
+Line 108
+- Closes the `if` block.
+
+Line 109
+- Ends `run_privileged()`.
+
+Line 111
+- Begins `ensure_state_dir()`.
+
+Line 112
+- Creates the state directory if it does not already exist.
+
+Line 113
+- Ends `ensure_state_dir()`.
+
+Line 115
+- Begins `generate_default_hostname_label()`.
+
+Line 116
+- Prints a generated label with an `anon-mac-` prefix and a timestamp suffix.
+
+Line 117
+- Ends `generate_default_hostname_label()`.
+
+Line 119
+- Begins `sanitize_hostname_label()`.
+
+Line 120
+- Removes characters that are not alphanumeric or hyphen, collapses repeated hyphens, and trims leading/trailing hyphens.
+
+Line 121
+- Ends `sanitize_hostname_label()`.
+
+Line 123
+- Begins `list_services()`.
+
+Line 124
+- Calls `networksetup -listallnetworkservices`, drops the heading line, and removes leading `*` markers.
+
+Line 125
+- Ends `list_services()`.
+
+Line 127
+- Begins `open_app_path()`.
+
+Line 128
+- Stores the app path argument in a local variable.
+
+Line 129
+- Launches the app path via `open -a`.
+
+Line 130
+- Ends `open_app_path()`.
+
+Line 132
+- Begins `list_app_search_roots()`.
+
+Line 133
+- Reads app-search roots either from `MACBOOK_ANONYMIZER_APP_SEARCH_ROOTS` or from the built-in default string.
+
+Line 134
+- Splits the colon-separated roots into one path per line.
+
+Line 135
+- Ends `list_app_search_roots()`.
+
+Line 137
+- Begins `find_app_in_roots()`.
+
+Line 138
+- Saves the relative app path argument.
+
+Line 139
+- Declares a local variable for the loop.
+
+Line 140
+- Starts reading each root path.
+
+Line 141
+- Skips empty root entries.
+
+Line 142
+- Checks whether the requested app exists under the current root.
+
+Line 143
+- Prints the found app path.
+
+Line 144
+- Returns success as soon as a match is found.
+
+Line 145
+- Closes the app-exists check.
+
+Line 146
+- Ends the loop and feeds it from `list_app_search_roots()` through process substitution.
+
+Line 147
+- Returns failure if no app match was found.
+
+Line 148
+- Ends `find_app_in_roots()`.
+
+Line 150
+- Begins `print_session_checklist()`.
+
+Lines 151-160
+- Print the leak-risk checklist lines shown to the user.
+
+Line 161
+- Ends `print_session_checklist()`.
+
+Line 163
+- Begins `list_safe_app_profiles()`.
+
+Line 164
+- Starts a literal here-document that prints the supported safer-app profiles.
+
+Lines 165-170
+- These lines are the printed profile list.
+
+Line 171
+- Ends the here-document.
+
+Line 172
+- Ends `list_safe_app_profiles()`.
+
+Line 174
+- Begins `resolve_safe_app_path()`.
+
+Line 175
+- Stores the requested profile name.
+
+Line 176
+- Starts a `case` statement on the profile name.
+
+Lines 177-182
+- Handle `tor-browser` by checking common Tor Browser app locations and returning success or failure.
+
+Lines 183-188
+- Handle `terminal` by checking common Terminal.app locations.
+
+Lines 189-194
+- Handle `textedit` by checking for TextEdit.app.
+
+Lines 195-200
+- Handle `preview` by checking for Preview.app.
+
+Lines 201-206
+- Handle `activity-monitor` by checking common Activity Monitor locations.
+
+Lines 207-209
+- Return failure for any unknown profile.
+
+Line 210
+- Ends the `case` statement.
+
+Line 211
+- Ends `resolve_safe_app_path()`.
+
+Line 213
+- Begins `print_safe_app_profile_note()`.
+
+Line 214
+- Stores the selected profile name.
+
+Line 215
+- Starts a `case` statement for note selection.
+
+Lines 216-218
+- Print the Tor Browser note.
+
+Lines 219-221
+- Print the Terminal note.
+
+Lines 222-224
+- Print the TextEdit note.
+
+Lines 225-227
+- Print the Preview note.
+
+Lines 228-230
+- Print the Activity Monitor note.
+
+Line 231
+- Ends the `case` statement.
+
+Line 232
+- Ends `print_safe_app_profile_note()`.
+
+Line 234
+- Begins `scutil_get_value()`.
+
+Line 235
+- Stores the requested `scutil` key.
+
+Line 236
+- Reads the key value with `scutil --get`, suppressing errors and turning failures into empty output.
+
+Line 237
+- Ends `scutil_get_value()`.
+
+Line 239
+- Begins `save_identity_state()`.
+
+Line 240
+- Ensures the state directory exists before writing files.
+
+Line 241
+- Writes the current `ComputerName` to the identity state file, truncating the file first.
+
+Line 242
+- Appends the current `LocalHostName`.
+
+Line 243
+- Appends the current `HostName`.
+
+Line 244
+- Ends `save_identity_state()`.
+
+Line 246
+- Begins `read_identity_state_field()`.
+
+Line 247
+- Stores the requested key name.
+
+Line 248
+- Uses `awk` to read the matching tab-separated field from the identity state file.
+
+Line 249
+- Ends `read_identity_state_field()`.
+
+Line 251
+- Begins `restore_identity_state()`.
+
+Line 252
+- Checks whether the identity state file exists.
+
+Line 253
+- Prints an error if no saved hostname state exists.
+
+Line 254
+- Returns failure in that case.
+
+Line 255
+- Closes the missing-file branch.
+
+Line 256
+- Declares local variables for the three host identity values.
+
+Line 257
+- Reads the saved `ComputerName`.
+
+Line 258
+- Reads the saved `LocalHostName`.
+
+Line 259
+- Reads the saved `HostName`.
+
+Line 260
+- Restores `ComputerName` if a saved value exists.
+
+Line 261
+- Restores `LocalHostName` if a saved value exists.
+
+Line 262
+- Restores `HostName` if a saved value exists.
+
+Line 263
+- Returns success.
+
+Line 264
+- Ends `restore_identity_state()`.
+
+Line 266
+- Begins `set_identity_values()`.
+
+Line 267
+- Stores the desired label.
+
+Line 268
+- Sets `ComputerName` to the label through a privileged call.
+
+Line 269
+- Sets `LocalHostName` to the label through a privileged call.
+
+Line 270
+- Sets `HostName` to the label through a privileged call.
+
+Line 271
+- Ends `set_identity_values()`.
+
+Line 273
+- Begins `identifier_looks_personal()`.
+
+Line 274
+- Stores the value to inspect.
+
+Line 275
+- Reads the current username into a local variable.
+
+Line 276
+- Checks whether the inspected value is empty.
+
+Line 277
+- Returns failure for empty values, meaning "not obviously personal".
+
+Line 278
+- Closes the empty-value check.
+
+Line 279
+- Checks whether the username appears inside the value.
+
+Line 280
+- Returns success if the username appears, meaning the identifier looks personal.
+
+Line 281
+- Closes that check.
+
+Line 282
+- Checks whether the value contains a space or `@` symbol.
+
+Line 283
+- Returns success if it does, again treating the value as likely personal.
+
+Line 284
+- Closes that check.
+
+Line 285
+- Returns failure if none of the personal heuristics matched.
+
+Line 286
+- Ends `identifier_looks_personal()`.
+
+Line 288
+- Begins `read_kv_field()`.
+
+Line 289
+- Stores the networksetup subcommand name.
+
+Line 290
+- Stores the service name.
+
+Line 291
+- Stores the field name to extract.
+
+Line 292
+- Runs the networksetup subcommand and extracts the named `Field: Value` entry using awk.
+
+Line 293
+- Ends `read_kv_field()`.
+
+Line 295
+- Begins `read_socks_field()`.
+
+Line 296
+- Reads one field from `-getsocksfirewallproxy` output.
+
+Line 297
+- Ends `read_socks_field()`.
+
+Line 299
+- Begins `read_web_field()`.
+
+Line 300
+- Reads one field from `-getwebproxy` output.
+
+Line 301
+- Ends `read_web_field()`.
+
+Line 303
+- Begins `read_secure_web_field()`.
+
+Line 304
+- Reads one field from `-getsecurewebproxy` output.
+
+Line 305
+- Ends `read_secure_web_field()`.
+
+Line 307
+- Begins `read_auto_proxy_field()`.
+
+Line 308
+- Reads one field from `-getautoproxyurl` output.
+
+Line 309
+- Ends `read_auto_proxy_field()`.
+
+Line 311
+- Begins `read_auto_discovery_state()`.
+
+Line 312
+- Reads proxy auto-discovery output and extracts the state value.
+
+Line 313
+- Ends `read_auto_discovery_state()`.
+
+Line 315
+- Begins `read_bypass_domains()`.
+
+Line 316
+- Stores the service name.
+
+Line 317
+- Declares a local variable for command output.
+
+Line 318
+- Captures the raw bypass-domain output for that service.
+
+Line 319
+- Checks whether macOS reported that there are no bypass domains.
+
+Line 320
+- Prints an empty string in that case.
+
+Line 321
+- Returns immediately after printing the empty result.
+
+Line 322
+- Closes the no-bypass-domains branch.
+
+Line 323
+- Converts the remaining bypass-domain list into a single pipe-separated string.
+
+Line 324
+- Ends `read_bypass_domains()`.
+
+Line 326
+- Begins `normalize_yes_no_state()`.
+
+Line 327
+- Starts a `case` statement on the incoming value.
+
+Line 328
+- Maps yes/on/true-like values to the exact string `on`.
+
+Line 329
+- Maps everything else to `off`.
+
+Line 330
+- Ends the `case` statement.
+
+Line 331
+- Ends `normalize_yes_no_state()`.
+
+Line 333
+- Begins `snapshot_proxy_state()`.
+
+Line 334
+- Ensures the state directory exists.
+
+Line 335
+- Creates or truncates the proxy state file.
+
+Line 336
+- Starts looping over network services.
+
+Line 337
+- Skips empty service names.
+
+Lines 338-341
+- Declare the local variables used to hold the current service's proxy-related values.
+
+Line 342
+- Reads whether SOCKS proxying is enabled.
+
+Line 343
+- Reads the SOCKS server.
+
+Line 344
+- Reads the SOCKS port.
+
+Line 345
+- Reads whether HTTP proxying is enabled.
+
+Line 346
+- Reads the HTTP proxy server.
+
+Line 347
+- Reads the HTTP proxy port.
+
+Line 348
+- Reads whether HTTPS proxying is enabled.
+
+Line 349
+- Reads the HTTPS proxy server.
+
+Line 350
+- Reads the HTTPS proxy port.
+
+Line 351
+- Reads whether auto-proxy/PAC is enabled.
+
+Line 352
+- Reads the auto-proxy URL.
+
+Line 353
+- Reads the proxy auto-discovery state.
+
+Line 354
+- Reads the bypass-domain list in packed form.
+
+Lines 355-361
+- Write one tab-separated row containing the service name plus all proxy values into the state file.
+
+Line 362
+- Ends the service loop and supplies its input from `list_services()`.
+
+Line 363
+- Ends `snapshot_proxy_state()`.
+
+Line 365
+- Begins `restore_proxy_state()`.
+
+Line 366
+- Checks whether the saved state file exists.
+
+Line 367
+- Prints a fallback message if no saved state exists.
+
+Line 368
+- Starts a loop over network services in the fallback path.
+
+Line 369
+- Skips empty service names.
+
+Line 370
+- Disables SOCKS proxy state.
+
+Line 371
+- Disables HTTP proxy state.
+
+Line 372
+- Disables HTTPS proxy state.
+
+Line 373
+- Disables auto-proxy/PAC state.
+
+Line 374
+- Disables proxy auto-discovery.
+
+Line 375
+- Clears proxy bypass domains.
+
+Line 376
+- Ends the fallback loop and supplies its input from `list_services()`.
+
+Line 377
+- Returns after completing the fallback cleanup.
+
+Line 378
+- Closes the missing-state branch.
+
+Lines 380-384
+- Start reading each tab-separated saved proxy-state row into local variables.
+
+Line 385
+- Skips empty service names.
+
+Line 386
+- Declares locals for unpacked auto-discovery and bypass-domain values.
+
+Line 387
+- Extracts the auto-discovery state from the packed field.
+
+Line 388
+- Extracts the bypass-domain text from the packed field.
+
+Line 390
+- Checks whether the saved SOCKS server and port are usable.
+
+Line 391
+- Restores the SOCKS proxy host and port when valid.
+
+Line 392
+- Closes the SOCKS-value existence check.
+
+Line 393
+- Restores SOCKS enabled/disabled state.
+
+Line 395
+- Checks whether the saved HTTP proxy host and port are usable.
+
+Line 396
+- Restores the HTTP proxy host and port when valid.
+
+Line 397
+- Closes that HTTP-value check.
+
+Line 398
+- Restores HTTP proxy enabled/disabled state.
+
+Line 400
+- Checks whether the saved HTTPS proxy host and port are usable.
+
+Line 401
+- Restores the HTTPS proxy host and port when valid.
+
+Line 402
+- Closes that HTTPS-value check.
+
+Line 403
+- Restores HTTPS proxy enabled/disabled state.
+
+Line 405
+- Checks whether an auto-proxy URL exists.
+
+Line 406
+- Restores that auto-proxy URL when present.
+
+Line 407
+- Closes the auto-proxy-URL check.
+
+Line 408
+- Restores the auto-proxy enabled/disabled state.
+
+Line 409
+- Restores the proxy auto-discovery state.
+
+Line 411
+- Checks whether bypass-domain data exists and is not just the unsplit packed value.
+
+Line 412
+- Splits the pipe-separated bypass list into a shell array.
+
+Line 413
+- Restores the bypass domains from the reconstructed array.
+
+Line 414
+- Starts the fallback branch for empty bypass domains.
+
+Line 415
+- Clears bypass domains when no saved bypass-domain list exists.
+
+Line 416
+- Closes the bypass-domain branch.
+
+Line 417
+- Ends the restore loop and reads from the state file.
+
+Line 418
+- Ends `restore_proxy_state()`.
+
+Line 420
+- Begins `start_tor()`.
+
+Line 421
+- Checks whether Homebrew reports the tor service as started.
+
+Line 422
+- Starts the tor Homebrew service when it is not already running.
+
+Line 423
+- Closes the `if` block.
+
+Line 424
+- Ends `start_tor()`.
+
+Line 426
+- Begins `stop_tor()`.
+
+Line 427
+- Checks whether Homebrew reports the tor service as started.
+
+Line 428
+- Stops the tor Homebrew service when it is running.
+
+Line 429
+- Closes the `if` block.
+
+Line 430
+- Ends `stop_tor()`.
+
+Line 432
+- Begins `disable_all_proxy_paths()`.
+
+Line 433
+- Starts looping over network services.
+
+Line 434
+- Skips empty service names.
+
+Line 435
+- Force-disables SOCKS proxy state, ignoring errors.
+
+Line 436
+- Force-disables HTTP proxy state, ignoring errors.
+
+Line 437
+- Force-disables HTTPS proxy state, ignoring errors.
+
+Line 438
+- Force-disables auto-proxy state, ignoring errors.
+
+Line 439
+- Force-disables proxy auto-discovery, ignoring errors.
+
+Line 440
+- Clears bypass domains, ignoring errors.
+
+Line 441
+- Ends the loop and feeds it from `list_services()`.
+
+Line 442
+- Ends `disable_all_proxy_paths()`.
+
+Line 444
+- Begins `wait_for_tor()`.
+
+Line 445
+- Sets the retry count to 20.
+
+Line 446
+- Declares the loop counter variable.
+
+Line 447
+- Starts a numeric retry loop.
+
+Line 448
+- Tests whether Tor's SOCKS port is reachable with `nc -z`.
+
+Line 449
+- Returns success immediately if the port is reachable.
+
+Line 450
+- Closes the reachability check.
+
+Line 451
+- Sleeps one second before the next retry.
+
+Line 452
+- Ends the retry loop.
+
+Line 453
+- Prints a failure message if the port never became reachable.
+
+Line 454
+- Returns failure.
+
+Line 455
+- Ends `wait_for_tor()`.
+
+Line 457
+- Begins `route_all_services_through_tor()`.
+
+Line 458
+- Starts looping over network services.
+
+Line 459
+- Skips empty service names.
+
+Line 460
+- Disables auto-proxy/PAC state for this service.
+
+Line 461
+- Disables proxy auto-discovery for this service.
+
+Line 462
+- Disables HTTP proxy state for this service.
+
+Line 463
+- Disables HTTPS proxy state for this service.
+
+Line 464
+- Clears bypass domains for this service.
+
+Line 465
+- Sets the SOCKS proxy host and port to Tor.
+
+Line 466
+- Enables the SOCKS proxy state.
+
+Line 467
+- Ends the loop and feeds it from `list_services()`.
+
+Line 468
+- Ends `route_all_services_through_tor()`.
+
+Line 470
+- Begins `print_tor_api_status()`.
+
+Line 471
+- Declares locals for the fetched API JSON and the parsed values.
+
+Line 472
+- Fetches Tor API JSON through the SOCKS proxy.
+
+Line 473
+- Extracts the `IsTor` flag from the JSON.
+
+Line 474
+- Extracts the reported IP from the JSON.
+
+Line 475
+- Prints the parsed Tor API result.
+
+Line 476
+- Ends `print_tor_api_status()`.
+
+Line 478
+- Begins `get_direct_ip()`.
+
+Line 479
+- Fetches the direct public IPv4 address without Tor and suppresses failures.
+
+Line 480
+- Ends `get_direct_ip()`.
+
+Line 482
+- Begins `get_tor_ip()`.
+
+Line 483
+- Fetches the public IPv4 address through the Tor SOCKS proxy and suppresses failures.
+
+Line 484
+- Ends `get_tor_ip()`.
+
+Line 486
+- Begins `get_tor_api_json()`.
+
+Line 487
+- Fetches Tor API JSON through the Tor SOCKS proxy and suppresses failures.
+
+Line 488
+- Ends `get_tor_api_json()`.
+
+Line 490
+- Begins `get_tor_api_is_tor()`.
+
+Line 491
+- Extracts the `IsTor` boolean from JSON-like text with `sed`.
+
+Line 492
+- Ends `get_tor_api_is_tor()`.
+
+Line 494
+- Begins `get_tor_api_ip()`.
+
+Line 495
+- Extracts the `IP` value from JSON-like text with `sed`.
+
+Line 496
+- Ends `get_tor_api_ip()`.
+
+Line 498
+- Begins `cmd_install()`.
+
+Line 499
+- Requires macOS.
+
+Line 500
+- Checks whether Homebrew exists.
+
+Line 501
+- Prints installation guidance if Homebrew is missing.
+
+Line 502
+- Exits with failure when Homebrew is missing.
+
+Line 503
+- Closes that check.
+
+Line 504
+- Installs `tor`, `curl`, and `torsocks` with Homebrew.
+
+Line 505
+- Prints a success message.
+
+Line 506
+- Ends `cmd_install()`.
+
+Line 508
+- Begins `cmd_doctor()`.
+
+Line 509
+- Requires macOS.
+
+Line 510
+- Prints a diagnostic header using `TOOL_NAME`.
+
+Line 511
+- Starts a loop over core required commands.
+
+Line 512
+- Checks whether the current command exists.
+
+Line 513
+- Prints `[ok]` when the command exists.
+
+Line 514
+- Starts the missing-command branch.
+
+Line 515
+- Prints `[missing]` when the command does not exist.
+
+Line 516
+- Closes the command-exists branch.
+
+Line 517
+- Ends the command loop.
+
+Line 518
+- Checks whether Homebrew exists before doing formula checks.
+
+Line 519
+- Starts a loop over the `tor` and `torsocks` formulas.
+
+Line 520
+- Checks whether the current formula is installed.
+
+Line 521
+- Prints `[ok]` for an installed formula.
+
+Line 522
+- Starts the missing-formula branch.
+
+Line 523
+- Prints `[missing]` for a missing formula.
+
+Line 524
+- Closes the formula-installed branch.
+
+Line 525
+- Ends the formula loop.
+
+Line 526
+- Closes the Homebrew-exists check.
+
+Line 527
+- Checks whether Tor's SOCKS port is reachable.
+
+Line 528
+- Prints an `[ok]` line when the port is reachable.
+
+Line 529
+- Starts the warning branch.
+
+Line 530
+- Prints a warning when the port is not reachable.
+
+Line 531
+- Closes the port-reachability branch.
+
+Line 532
+- Starts looping over network services.
+
+Line 533
+- Skips empty service names.
+
+Line 534
+- Prints the current service header.
+
+Line 535
+- Prints a parsed summary of SOCKS settings for that service.
+
+Line 536
+- Prints a parsed summary of HTTP proxy settings.
+
+Line 537
+- Prints a parsed summary of HTTPS proxy settings.
+
+Line 538
+- Prints the PAC state and URL.
+
+Line 539
+- Prints the proxy auto-discovery state.
+
+Line 540
+- Checks whether bypass domains exist.
+
+Line 541
+- Prints that bypass domains are set when the list is non-empty.
+
+Line 542
+- Starts the empty-bypass branch.
+
+Line 543
+- Prints that bypass domains are empty when none exist.
+
+Line 544
+- Closes the bypass-domain branch.
+
+Line 545
+- Ends the service loop and feeds it from `list_services()`.
+
+Line 546
+- Ends `cmd_doctor()`.
+
+Line 548
+- Begins `cmd_start()`.
+
+Line 549
+- Requires macOS.
+
+Line 550
+- Requires `networksetup`.
+
+Line 551
+- Requires `brew`.
+
+Line 552
+- Requires `nc`.
+
+Line 554
+- Prints a startup header.
+
+Line 555
+- Saves the current proxy state before making changes.
+
+Line 556
+- Starts the Tor service if needed.
+
+Line 557
+- Waits for Tor's SOCKS port to come up.
+
+Line 558
+- Routes all network services through Tor.
+
+Line 560
+- Prints the high-level success message.
+
+Line 561
+- Prints a reminder that PAC, auto-discovery, and bypass domains were disabled while active.
+
+Line 562
+- Suggests the `status` follow-up command.
+
+Line 563
+- Suggests the `test` follow-up command.
+
+Line 564
+- Ends `cmd_start()`.
+
+Line 566
+- Begins `cmd_stop()`.
+
+Line 567
+- Requires macOS.
+
+Line 568
+- Requires `networksetup`.
+
+Line 569
+- Requires `brew`.
+
+Line 571
+- Prints a shutdown header.
+
+Line 572
+- Restores the previously saved proxy state.
+
+Line 573
+- Stops the Tor service.
+
+Line 574
+- Prints the completion message.
+
+Line 575
+- Ends `cmd_stop()`.
+
+Line 577
+- Begins `cmd_panic_stop()`.
+
+Line 578
+- Requires macOS.
+
+Line 579
+- Requires `networksetup`.
+
+Line 581
+- Prints the panic-stop header.
+
+Line 582
+- Force-disables all proxy paths immediately.
+
+Line 583
+- Checks whether a saved proxy state file exists.
+
+Line 584
+- Prints that saved state is about to be restored.
+
+Line 585
+- Restores the saved proxy state.
+
+Line 586
+- Closes the saved-state check.
+
+Line 587
+- Checks whether `brew` exists before trying a graceful Tor stop.
+
+Line 588
+- Stops Tor through Homebrew, ignoring failure.
+
+Line 589
+- Closes the Homebrew check.
+
+Line 590
+- Checks whether a `tor` process is still running.
+
+Line 591
+- Sends SIGTERM directly to the `tor` process, ignoring failure.
+
+Line 592
+- Closes the `pgrep` check.
+
+Line 593
+- Prints panic-stop completion.
+
+Line 594
+- Ends `cmd_panic_stop()`.
+
+Line 596
+- Begins `cmd_status()`.
+
+Line 597
+- Requires macOS.
+
+Line 598
+- Requires `networksetup`.
+
+Line 599
+- Requires `brew`.
+
+Line 601
+- Prints the Tor service status header.
+
+Line 602
+- Prints the `brew services list` header line plus the row for `tor`.
+
+Line 603
+- Prints a blank line.
+
+Line 604
+- Prints the per-service proxy-status header.
+
+Line 605
+- Starts looping over network services.
+
+Line 606
+- Skips empty service names.
+
+Line 607
+- Prints the service label.
+
+Line 608
+- Prints SOCKS state, server, and port.
+
+Line 609
+- Prints HTTP proxy state, server, and port.
+
+Line 610
+- Prints HTTPS proxy state, server, and port.
+
+Line 611
+- Prints PAC state and URL.
+
+Line 612
+- Prints proxy auto-discovery state.
+
+Line 613
+- Declares a local variable for bypass domains.
+
+Line 614
+- Reads the bypass-domain list.
+
+Line 615
+- Prints the bypass-domain result, defaulting to `none`.
+
+Line 616
+- Ends the service loop and feeds it from `list_services()`.
+
+Line 617
+- Checks whether a saved proxy-state file exists.
+
+Line 618
+- Prints a blank line before the saved-state path.
+
+Line 619
+- Prints the state-file location.
+
+Line 620
+- Closes the saved-state-file check.
+
+Line 621
+- Ends `cmd_status()`.
+
+Line 623
+- Begins `cmd_test()`.
+
+Line 624
+- Requires macOS.
+
+Line 625
+- Requires `curl`.
+
+Line 627
+- Declares local variables for direct and Tor IPs.
+
+Line 628
+- Fetches the direct public IP.
+
+Line 629
+- Fetches the Tor-routed public IP.
+
+Line 631
+- Prints the direct IP, defaulting to `unavailable`.
+
+Line 632
+- Prints the Tor IP, defaulting to `unavailable`.
+
+Line 633
+- Prints the parsed Tor API status.
+
+Line 635
+- Checks whether both IPs exist and differ.
+
+Line 636
+- Prints success if the Tor exit IP differs from the direct IP.
+
+Line 637
+- Starts the warning branch.
+
+Line 638
+- Prints a warning when the routing difference could not be confirmed.
+
+Line 639
+- Closes the direct-vs-Tor comparison branch.
+
+Line 640
+- Ends `cmd_test()`.
+
+Line 642
+- Begins `cmd_self_test()`.
+
+Lines 643-647
+- Require macOS plus the specific commands needed by the self-test flow.
+
+Lines 649-654
+- Declare counters, flags, IP variables, and capture the original Tor service state.
+
+Line 656
+- Begins the nested `restore_self_test_state()` helper.
+
+Line 657
+- Checks whether this self-test instance started Tor itself.
+
+Line 658
+- Restores proxy state if it did.
+
+Line 659
+- Checks whether Tor was originally already started before the self-test.
+
+Line 660
+- Restarts Tor if it was originally running.
+
+Line 661
+- Starts the opposite branch.
+
+Line 662
+- Stops Tor if the self-test started it but it was not originally running.
+
+Line 663
+- Closes the original-state branch.
+
+Line 664
+- Closes the started-here branch.
+
+Line 665
+- Ends the nested cleanup helper.
+
+Line 667
+- Registers the nested cleanup helper as an EXIT trap.
+
+Line 669
+- Begins the nested `report_result()` helper.
+
+Lines 670-671
+- Store the status and message arguments.
+
+Line 672
+- Checks whether the reported status is `ok`.
+
+Line 673
+- Prints an `[ok]` result line.
+
+Line 674
+- Increments the passed counter.
+
+Line 675
+- Starts the failure branch.
+
+Line 676
+- Prints a `[fail]` result line.
+
+Line 677
+- Increments the failed counter.
+
+Line 678
+- Closes the status branch.
+
+Line 679
+- Ends `report_result()`.
+
+Line 681
+- Prints the self-test header.
+
+Line 682
+- Snapshots the current proxy state.
+
+Line 683
+- Starts Tor.
+
+Line 684
+- Marks that this self-test instance started Tor.
+
+Line 685
+- Checks whether Tor became reachable.
+
+Line 686
+- Reports success when the SOCKS port is reachable.
+
+Line 687
+- Starts the failure branch.
+
+Line 688
+- Reports failure when the SOCKS port never became reachable.
+
+Line 689
+- Closes the reachability branch.
+
+Line 691
+- Routes all services through Tor.
+
+Line 692
+- Checks whether the proxy snapshot file exists.
+
+Line 693
+- Reports success if the snapshot file exists.
+
+Line 694
+- Starts the failure branch.
+
+Line 695
+- Reports failure if the snapshot file is missing.
+
+Line 696
+- Closes the snapshot-file branch.
+
+Line 698
+- Fetches the direct IP.
+
+Line 699
+- Fetches the Tor-routed IP.
+
+Line 700
+- Fetches the Tor API JSON.
+
+Line 701
+- Extracts the `IsTor` flag.
+
+Line 702
+- Extracts the Tor API IP.
+
+Line 704
+- Prints the direct IP.
+
+Line 705
+- Prints the Tor IP.
+
+Line 706
+- Prints the Tor API summary.
+
+Line 708
+- Checks whether direct and Tor IPs are both present and different.
+
+Line 709
+- Reports success if the two IPs differ.
+
+Line 710
+- Starts the failure branch.
+
+Line 711
+- Reports failure if the two IPs do not differ.
+
+Line 712
+- Closes that branch.
+
+Line 714
+- Checks whether the Tor Project API explicitly reported `true`.
+
+Line 715
+- Reports success if the API confirms Tor routing.
+
+Line 716
+- Starts the failure branch.
+
+Line 717
+- Reports failure if the API did not confirm Tor routing.
+
+Line 718
+- Closes that branch.
+
+Line 720
+- Prints the self-test summary counters.
+
+Line 721
+- Checks whether any test failed.
+
+Line 722
+- Returns failure when at least one check failed.
+
+Line 723
+- Closes the failure-count branch.
+
+Line 724
+- Ends `cmd_self_test()`.
+
+Line 726
+- Begins `cmd_newnym()`.
+
+Line 727
+- Requires macOS.
+
+Line 728
+- Prints that a new Tor circuit is being requested.
+
+Line 729
+- Checks whether a `tor` process is running.
+
+Line 730
+- Sends SIGHUP to Tor, which is a best-effort request for a new circuit.
+
+Line 731
+- Waits briefly after signaling.
+
+Line 732
+- Prints the success message.
+
+Line 733
+- Starts the not-running branch.
+
+Line 734
+- Prints that the Tor process was not found.
+
+Line 735
+- Exits with failure.
+
+Line 736
+- Closes that branch.
+
+Line 737
+- Ends `cmd_newnym()`.
+
+Line 739
+- Begins `cmd_privacy_report()`.
+
+Line 740
+- Requires macOS.
+
+Line 741
+- Requires `scutil`.
+
+Line 742
+- Declares local variables for the three hostname fields.
+
+Line 743
+- Reads `ComputerName`.
+
+Line 744
+- Reads `LocalHostName`.
+
+Line 745
+- Reads `HostName`.
+
+Line 746
+- Prints the report header.
+
+Line 747
+- Prints `ComputerName`, defaulting to `unset`.
+
+Line 748
+- Prints `LocalHostName`, defaulting to `unset`.
+
+Line 749
+- Prints `HostName`, defaulting to `unset`.
+
+Line 750
+- Checks whether any of the three values looks personal.
+
+Line 751
+- Prints the warning if any identifier looks personal.
+
+Line 752
+- Prints a suggested cloaking command.
+
+Line 753
+- Starts the no-warning branch.
+
+Line 754
+- Prints that no obvious personal identifiers were found.
+
+Line 755
+- Closes the personal-identifier branch.
+
+Line 756
+- Checks whether a saved identity-state file exists.
+
+Line 757
+- Prints the identity-state file path if it exists.
+
+Line 758
+- Closes that file-exists check.
+
+Line 759
+- Ends `cmd_privacy_report()`.
+
+Line 761
+- Begins `cmd_tor_env()`.
+
+Line 762
+- Requires macOS.
+
+Line 763
+- Starts a here-document that prints environment-variable guidance.
+
+Lines 764-774
+- Print export examples and usage examples for proxy-aware tools.
+
+Line 775
+- Ends the here-document.
+
+Line 776
+- Ends `cmd_tor_env()`.
+
+Line 778
+- Begins `cmd_cloak_hostname()`.
+
+Line 779
+- Requires macOS.
+
+Line 780
+- Requires `scutil`.
+
+Line 781
+- Requires privileged access.
+
+Line 782
+- Reads the requested label or generates a default one.
+
+Line 783
+- Declares a variable for the sanitized label.
+
+Line 784
+- Sanitizes the chosen label.
+
+Line 785
+- Checks whether sanitization produced an empty result.
+
+Line 786
+- Prints an error if no valid label could be derived.
+
+Line 787
+- Exits with failure in that case.
+
+Line 788
+- Closes the invalid-label branch.
+
+Line 789
+- Saves the current identity state before changing anything.
+
+Line 790
+- Tries to apply the new hostname values.
+
+Line 791
+- Prints a rollback message if applying the values failed.
+
+Line 792
+- Attempts to restore the old identity values.
+
+Line 793
+- Exits with failure after rollback.
+
+Line 794
+- Closes the failure branch.
+
+Line 795
+- Prints the new cloaked identity label.
+
+Line 796
+- Prints the restore command to use later.
+
+Line 797
+- Ends `cmd_cloak_hostname()`.
+
+Line 799
+- Begins `cmd_restore_hostname()`.
+
+Line 800
+- Requires macOS.
+
+Line 801
+- Requires `scutil`.
+
+Line 802
+- Requires privileged access.
+
+Line 803
+- Calls `restore_identity_state()` and checks whether it succeeded.
+
+Line 804
+- Prints success when hostname values were restored.
+
+Line 805
+- Starts the failure branch.
+
+Line 806
+- Exits with failure when restore did not succeed.
+
+Line 807
+- Closes the restore branch.
+
+Line 808
+- Ends `cmd_restore_hostname()`.
+
+Line 810
+- Begins `cmd_checklist()`.
+
+Line 811
+- Requires macOS.
+
+Line 812
+- Prints the session checklist.
+
+Line 813
+- Ends `cmd_checklist()`.
+
+Line 815
+- Begins `cmd_safe_apps()`.
+
+Line 816
+- Requires macOS.
+
+Line 817
+- Prints the safe-app profile list.
+
+Line 818
+- Ends `cmd_safe_apps()`.
+
+Line 820
+- Begins `cmd_launch_safe_app()`.
+
+Line 821
+- Requires macOS.
+
+Line 822
+- Reads the requested profile name.
+
+Line 823
+- Initializes the resolved app path variable.
+
+Line 824
+- Checks whether the user supplied a profile.
+
+Line 825
+- Prints usage when no profile was supplied.
+
+Line 826
+- Prints the list of safe-app profiles in that case.
+
+Line 827
+- Exits with failure when no profile was supplied.
+
+Line 828
+- Closes the missing-profile branch.
+
+Line 829
+- Tries to resolve the requested profile into a real app path.
+
+Line 830
+- Prints an error if the profile is unknown or unavailable.
+
+Line 831
+- Prints the available profile list again.
+
+Line 832
+- Exits with failure for an unknown or unavailable profile.
+
+Line 833
+- Closes the unavailable-profile branch.
+
+Line 834
+- Prints that the requested safe-app profile is being launched.
+
+Line 835
+- Prints the profile-specific note.
+
+Line 836
+- Checks whether the selected profile is Tor Browser.
+
+Line 837
+- Prints the full session checklist for Tor Browser launches.
+
+Line 838
+- Closes the Tor Browser special-case branch.
+
+Line 839
+- Opens the resolved app path.
+
+Line 840
+- Ends `cmd_launch_safe_app()`.
+
+Line 842
+- Begins `cmd_open_tor_browser()`.
+
+Line 843
+- Requires macOS.
+
+Line 844
+- Delegates directly to `cmd_launch_safe_app tor-browser`.
+
+Line 845
+- Ends `cmd_open_tor_browser()`.
+
+Line 847
+- Begins `cmd_validate()`.
+
+Line 848
+- Requires `awk`.
+
+Line 849
+- Requires `sed`.
+
+Line 850
+- Requires `paste`.
+
+Line 851
+- Prints that static validation checks passed.
+
+Line 852
+- Ends `cmd_validate()`.
+
+Line 854
+- Begins `main()`.
+
+Line 855
+- Reads the first command-line argument into `cmd`.
+
+Line 856
+- Starts the `case` statement that dispatches commands.
+
+Line 857
+- Routes `install` to `cmd_install`.
+
+Line 858
+- Routes `doctor` to `cmd_doctor`.
+
+Line 859
+- Routes `start` to `cmd_start`.
+
+Line 860
+- Routes `stop` to `cmd_stop`.
+
+Line 861
+- Routes `panic-stop` to `cmd_panic_stop`.
+
+Line 862
+- Routes `status` to `cmd_status`.
+
+Line 863
+- Routes `test` to `cmd_test`.
+
+Line 864
+- Routes `self-test` to `cmd_self_test`.
+
+Line 865
+- Routes `privacy-report` to `cmd_privacy_report`.
+
+Line 866
+- Routes `tor-env` to `cmd_tor_env`.
+
+Line 867
+- Begins the special dispatch branch for `cloak-hostname`.
+
+Line 868
+- Removes the command token from `$@` so the remaining arguments can be forwarded cleanly.
+
+Line 869
+- Calls `cmd_cloak_hostname` with the remaining arguments.
+
+Line 870
+- Ends the `cloak-hostname` branch.
+
+Line 871
+- Routes `restore-hostname` to `cmd_restore_hostname`.
+
+Line 872
+- Routes `newnym` to `cmd_newnym`.
+
+Line 873
+- Routes `checklist` to `cmd_checklist`.
+
+Line 874
+- Routes `safe-apps` to `cmd_safe_apps`.
+
+Line 875
+- Begins the special dispatch branch for `launch-safe-app`.
+
+Line 876
+- Removes the command token from `$@` so the remaining arguments can be forwarded cleanly.
+
+Line 877
+- Calls `cmd_launch_safe_app` with the remaining arguments.
+
+Line 878
+- Ends the `launch-safe-app` branch.
+
+Line 879
+- Routes `open-tor-browser` to `cmd_open_tor_browser`.
+
+Line 880
+- Routes `validate` to `cmd_validate`.
+
+Line 881
+- Routes `-h`, `--help`, `help`, and an empty command to `usage()`.
+
+Line 882
+- Begins the unknown-command fallback branch.
+
+Line 883
+- Prints the unknown command name.
+
+Line 884
+- Prints the usage text.
+
+Line 885
+- Exits with failure for unknown commands.
+
+Line 886
+- Ends the unknown-command branch.
+
+Line 887
+- Ends the `case` statement.
+
+Line 888
+- Ends `main()`.
+
+Line 890
+- Calls `main "$@"`, which starts the real command dispatch using the script's original command-line arguments.
+
+What the script does overall
+- It installs and manages Tor on macOS.
+- It snapshots the user's current proxy configuration before making changes.
+- It reroutes macOS network services through Tor's SOCKS proxy.
+- It can restore original proxy settings normally or through a panic path.
+- It provides testing, diagnostics, hostname cloaking, and safer-app launching helpers.
+
+Most important execution paths
+- Normal start: `cmd_start()` saves state, starts Tor, waits for the SOCKS port, then routes services through Tor.
+- Normal stop: `cmd_stop()` restores saved proxy state and stops Tor.
+- Emergency stop: `cmd_panic_stop()` force-disables proxy paths first, then tries to restore and stop Tor.
+- Guided verification: `cmd_self_test()` performs a start-like flow, checks routing, and restores state automatically on exit.
+
+Main implementation caveats
+- Internal strings and state-file names still use the old project name.
+- JSON parsing is done with `sed`, which is simple but brittle.
+- The script directly changes real macOS network settings, so testing should be done carefully.

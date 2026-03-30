@@ -58,7 +58,7 @@ struct HeaderView: View {
         VStack(spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Si Or No Goobledygook")
+                    Text("MacBook Anonymizer")
                         .font(.system(size: 24, weight: .bold, design: .default))
                         .foregroundColor(.white)
                     

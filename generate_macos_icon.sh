@@ -3,11 +3,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS_DIR="$SCRIPT_DIR/assets"
-SOURCE_SVG="$ASSETS_DIR/si_or_no_goobledygook-icon.svg"
-OUTPUT_ICNS="$ASSETS_DIR/SiOrNoGoobledygook.icns"
+SOURCE_SVG="$ASSETS_DIR/macbook_anonymizer-icon.svg"
+OUTPUT_ICNS="$ASSETS_DIR/MacBookAnonymizer.icns"
 TMP_DIR="$(mktemp -d)"
 PNG_PATH="$TMP_DIR/source.png"
-ICONSET_DIR="$TMP_DIR/SiOrNoGoobledygook.iconset"
+ICONSET_DIR="$TMP_DIR/MacBookAnonymizer.iconset"
 
 cleanup() {
   rm -rf "$TMP_DIR"

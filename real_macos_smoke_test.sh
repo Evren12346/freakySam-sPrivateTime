@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TOOL="$SCRIPT_DIR/bin/si_or_no_goobledygook.sh"
+TOOL="$SCRIPT_DIR/bin/macbook_anonymizer.sh"
 LOG_DIR="$SCRIPT_DIR/test_logs"
 LOG_FILE="$LOG_DIR/real-macos-smoke-test-$(date +%Y%m%d%H%M%S).log"
 

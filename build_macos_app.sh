@@ -2,13 +2,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_NAME="Si Or No Goobledygook"
+APP_NAME="MacBook Anonymizer"
 APP_PATH="$SCRIPT_DIR/${APP_NAME}.app"
-COMMAND_PATH="$SCRIPT_DIR/Si Or No Goobledygook.command"
+COMMAND_PATH="$SCRIPT_DIR/MacBook Anonymizer.command"
 HOME_APPLICATIONS_DIR="$HOME/Applications"
 INSTALL_TO_HOME_APPLICATIONS="false"
-ICON_SOURCE_PATH="$SCRIPT_DIR/assets/si_or_no_goobledygook-icon.svg"
-ICON_FILE_NAME="SiOrNoGoobledygook.icns"
+ICON_SOURCE_PATH="$SCRIPT_DIR/assets/macbook_anonymizer-icon.svg"
+ICON_FILE_NAME="MacBookAnonymizer.icns"
 ICON_DEST_PATH="$APP_PATH/Contents/Resources/$ICON_FILE_NAME"
 
 if [[ "${1:-}" == "--install-to-home-applications" ]]; then

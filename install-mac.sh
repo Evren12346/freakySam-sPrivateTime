@@ -6,4 +6,4 @@ if [[ "$(uname -s)" != "Darwin" ]]; then
   exit 1
 fi
 
-curl -fsSL "https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-from-github.sh" | bash
+curl -fsSL "https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-from-github.sh" | bash

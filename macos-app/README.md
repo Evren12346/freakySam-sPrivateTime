@@ -1,4 +1,4 @@
-# Si Or No Goobledygook - Native macOS App
+# MacBook Anonymizer - Native macOS App
 
 A beautiful, native SwiftUI application for managing Tor anonymity on macOS.
 
@@ -7,7 +7,7 @@ A beautiful, native SwiftUI application for managing Tor anonymity on macOS.
 ### Prerequisites
 - macOS 12 or later
 - Xcode 13+ with SwiftUI support
-- The base Si Or No Goobledygook installation
+- The base MacBook Anonymizer installation
 
 ### Build from Source
 
@@ -26,10 +26,10 @@ open Package.swift
 ### Installation
 
 1. Build the app (see above)
-2. The built binary will be in `.build/release/SiOrNoGoobledygook`
+2. The built binary will be in `.build/release/MacBookAnonymizer`
 3. Copy to Applications:
 ```bash
-cp .build/release/SiOrNoGoobledygook ~/Applications/
+cp .build/release/MacBookAnonymizer ~/Applications/
 ```
 
 ## Features
@@ -49,18 +49,18 @@ cp .build/release/SiOrNoGoobledygook ~/Applications/
 
 ## Integration with Base Script
 
-The app automatically locates and executes the base `si_or_no_goobledygook.sh` script. It expects the script at:
-- `~/Applications/Si Or No Goobledygook/bin/si_or_no_goobledygook.sh` (GitHub installer path)
+The app automatically locates and executes the base `macbook_anonymizer.sh` script. It expects the script at:
+- `~/Applications/MacBook Anonymizer/bin/macbook_anonymizer.sh` (GitHub installer path)
 - Or relative to the app bundle in development
 
 ## Troubleshooting
 
 If commands fail:
-1. Ensure the base installation is complete: `~/Applications/Si Or No Goobledygook/install.sh`
+1. Ensure the base installation is complete: `~/Applications/MacBook Anonymizer/install.sh`
 2. Check that Tor is installed: `which tor`
 3. Try running commands directly in Terminal:
    ```bash
-   ~/Applications/Si\ Or\ No\ Goobledygook/bin/si_or_no_goobledygook.sh status
+   ~/Applications/Si\ Or\ No\ Goobledygook/bin/macbook_anonymizer.sh status
    ```
 
 ## Signing and Distribution
@@ -70,8 +70,8 @@ For distribution, you can code sign and notarize:
 ```bash
 # Sign the app
 codesign --deep --force --verify --verbose --sign "Developer ID Application" \
-  ~/Applications/SiOrNoGoobledygook.app
+  ~/Applications/MacBookAnonymizer.app
 
 # Notarize (requires Apple Developer account)
-xcrun notarytool submit SiOrNoGoobledygook.zip --key-chain-profile AC_PASSWORD --wait
+xcrun notarytool submit MacBookAnonymizer.zip --key-chain-profile AC_PASSWORD --wait
 ```

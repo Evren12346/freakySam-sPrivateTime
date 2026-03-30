@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="$SCRIPT_DIR/build"
 MACOS_MINIMUM_VERSION="12.0"
 
-echo "🔨 Building Si Or No Goobledygook macOS App..."
+echo "🔨 Building MacBook Anonymizer macOS App..."
 echo
 
 # Clean previous builds

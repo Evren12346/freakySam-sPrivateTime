@@ -16,15 +16,15 @@ class AppManager: NSObject, ObservableObject {
         // Find the script relative to the app bundle
         if let bundlePath = Bundle.main.bundlePath as String? {
             let pathComponents = bundlePath.components(separatedBy: "/")
-            if let appIdx = pathComponents.lastIndex(of: "SiOrNoGoobledygook.app") {
+            if let appIdx = pathComponents.lastIndex(of: "MacBookAnonymizer.app") {
                 let basePath = pathComponents[0...appIdx-1].joined(separator: "/")
-                self.scriptPath = "\(basePath)/bin/si_or_no_goobledygook.sh"
+                self.scriptPath = "\(basePath)/bin/macbook_anonymizer.sh"
             } else {
                 // Fallback for development
-                self.scriptPath = "\(NSHomeDirectory())/Applications/Si Or No Goobledygook/bin/si_or_no_goobledygook.sh"
+                self.scriptPath = "\(NSHomeDirectory())/Applications/MacBook Anonymizer/bin/macbook_anonymizer.sh"
             }
         } else {
-            self.scriptPath = "\(NSHomeDirectory())/Applications/Si Or No Goobledygook/bin/si_or_no_goobledygook.sh"
+            self.scriptPath = "\(NSHomeDirectory())/Applications/MacBook Anonymizer/bin/macbook_anonymizer.sh"
         }
         
         super.init()
@@ -76,7 +76,7 @@ class AppManager: NSObject, ObservableObject {
             process.standardError = pipe
             
             // Build command - use sudo if needed
-            let cmd = "cd '\(NSHomeDirectory())/Applications/Si Or No Goobledygook' && './bin/si_or_no_goobledygook.sh' \(args.joined(separator: " "))"
+            let cmd = "cd '\(NSHomeDirectory())/Applications/MacBook Anonymizer' && './bin/macbook_anonymizer.sh' \(args.joined(separator: " "))"
             process.arguments = ["-c", cmd]
             
             do {

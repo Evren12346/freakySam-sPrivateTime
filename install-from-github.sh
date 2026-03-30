@@ -2,8 +2,8 @@
 set -euo pipefail
 
 REPO_OWNER="Evren12346"
-REPO_NAME="si-or-no-goobledygook"
-INSTALL_DIR="${FREAKY_INSTALL_DIR:-$HOME/Applications/Si Or No Goobledygook}"
+REPO_NAME="macbook-anonymizer"
+INSTALL_DIR="${MACBOOK_ANONYMIZER_INSTALL_DIR:-$HOME/Applications/MacBook Anonymizer}"
 AUTO_LAUNCH="${SI_OR_NO_AUTO_LAUNCH:-1}"
 TMP_DIR="$(mktemp -d)"
 PAYLOAD_DIR="$TMP_DIR/payload"
@@ -36,7 +36,7 @@ require_cmd curl
 require_cmd tar
 
 resolve_release_ref() {
-	local requested_ref="${FREAKY_INSTALL_REF:-}"
+	local requested_ref="${MACBOOK_ANONYMIZER_INSTALL_REF:-}"
 	local release_json latest_tag
 	if [[ -n "$requested_ref" ]]; then
 		REPO_REF="$requested_ref"
@@ -83,10 +83,10 @@ fi
 mv "$EXTRACTED_DIR" "$INSTALL_DIR"
 
 chmod +x "$INSTALL_DIR/install.sh"
-chmod +x "$INSTALL_DIR/Si Or No Goobledygook.command"
-chmod +x "$INSTALL_DIR/Install Si Or No Goobledygook.command"
+chmod +x "$INSTALL_DIR/MacBook Anonymizer.command"
+chmod +x "$INSTALL_DIR/Install MacBook Anonymizer.command"
 chmod +x "$INSTALL_DIR/build_macos_app.sh"
-chmod +x "$INSTALL_DIR/bin/si_or_no_goobledygook.sh"
+chmod +x "$INSTALL_DIR/bin/macbook_anonymizer.sh"
 
 echo "Installing dependencies and preparing launchers in: $INSTALL_DIR"
 "$INSTALL_DIR/install.sh"
@@ -94,16 +94,16 @@ echo "Installing dependencies and preparing launchers in: $INSTALL_DIR"
 echo
 echo "Installed successfully."
 echo "Installed version/ref: $REPO_REF"
-if [[ -d "$HOME/Applications/Si Or No Goobledygook.app" ]]; then
-	echo "Launchpad-ready app: $HOME/Applications/Si Or No Goobledygook.app"
+if [[ -d "$HOME/Applications/MacBook Anonymizer.app" ]]; then
+	echo "Launchpad-ready app: $HOME/Applications/MacBook Anonymizer.app"
 fi
-echo "Menu launcher: $INSTALL_DIR/Si Or No Goobledygook.command"
-echo "Interactive commands: $INSTALL_DIR/bin/si_or_no_goobledygook.sh"
+echo "Menu launcher: $INSTALL_DIR/MacBook Anonymizer.command"
+echo "Interactive commands: $INSTALL_DIR/bin/macbook_anonymizer.sh"
 echo "If macOS warns about opening a downloaded launcher, right-click it and choose Open once."
 
 if [[ "$AUTO_LAUNCH" == "1" ]]; then
 	echo
 	echo "Opening the menu launcher now..."
-	open "$INSTALL_DIR/Si Or No Goobledygook.command" || true
+	open "$INSTALL_DIR/MacBook Anonymizer.command" || true
 	echo "Tip: disable auto-launch with SI_OR_NO_AUTO_LAUNCH=0"
 fi

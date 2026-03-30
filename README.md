@@ -1,4 +1,4 @@
-# Si Or No Goobledygook
+# MacBook Anonymizer
 
 A macOS anonymity helper that routes network traffic through Tor using stricter macOS proxy hardening.
 
@@ -9,7 +9,7 @@ The GitHub repo explains install right here at the top because most users will l
 ## GitHub Quick Start (Copy/Paste)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-mac.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-mac.sh | bash
 ```
 
 This installs everything and auto-opens the menu launcher.
@@ -17,7 +17,7 @@ This installs everything and auto-opens the menu launcher.
 If you prefer no auto-open:
 
 ```bash
-SI_OR_NO_AUTO_LAUNCH=0 curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-from-github.sh | bash
+SI_OR_NO_AUTO_LAUNCH=0 curl -fsSL https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-from-github.sh | bash
 ```
 
 Manual launch (any time):
@@ -28,32 +28,32 @@ Manual launch (any time):
 
 ## Direct ZIP Download
 
-- Latest release ZIP (`v1.2.0`): https://github.com/Evren12346/si-or-no-goobledygook/archive/refs/tags/v1.2.0.zip
-- Latest main branch ZIP: https://github.com/Evren12346/si-or-no-goobledygook/archive/refs/heads/main.zip
+- Latest release ZIP (`v1.2.0`): https://github.com/Evren12346/macbook-anonymizer/archive/refs/tags/v1.2.0.zip
+- Latest main branch ZIP: https://github.com/Evren12346/macbook-anonymizer/archive/refs/heads/main.zip
 
 ### Option 1: GitHub ZIP download
 
 1. Download the repository ZIP from GitHub and unzip it.
 2. Open the unzipped folder.
-3. Double-click `Install Si Or No Goobledygook.command`.
+3. Double-click `Install MacBook Anonymizer.command`.
 4. If macOS blocks the launcher the first time, right-click it and choose `Open`.
-5. After install finishes, double-click `Si Or No Goobledygook.command` to use the menu.
+5. After install finishes, double-click `MacBook Anonymizer.command` to use the menu.
 
 ### Option 2: One-line Terminal install from GitHub
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Evren12346/si-or-no-goobledygook/main/install-mac.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-mac.sh | bash
 ```
 
-This installs the project into `~/Applications/Si Or No Goobledygook`, installs dependencies, prepares the launchers, and opens the menu automatically.
+This installs the project into `~/Applications/MacBook Anonymizer`, installs dependencies, prepares the launchers, and opens the menu automatically.
 
 The GitHub installer now prefers the latest GitHub release tag when one exists, falls back to `main` if needed, and creates a Launchpad-ready app bundle in `~/Applications`.
 
 ### Option 3: Git clone
 
 ```bash
-git clone https://github.com/Evren12346/si-or-no-goobledygook.git
-cd si-or-no-goobledygook
+git clone https://github.com/Evren12346/macbook-anonymizer.git
+cd macbook-anonymizer
 ./install.sh
 ```
 
@@ -74,8 +74,8 @@ The easiest way to do this is the included menu launcher:
 
 The installer also tries to create:
 
-- `~/Applications/Si Or No Goobledygook.app` for Finder and Launchpad use
-- `~/Applications/Si Or No Goobledygook` as the installed project folder for the GitHub installer path
+- `~/Applications/MacBook Anonymizer.app` for Finder and Launchpad use
+- `~/Applications/MacBook Anonymizer` as the installed project folder for the GitHub installer path
 
 The repo also includes a real-Mac smoke test runner and a packaging script for signed/notarized release builds.
 
@@ -122,18 +122,18 @@ See [macos-app/README.md](macos-app/README.md) for detailed build and installati
 
 ## Command-Line Files
 
-- Main script: `bin/si_or_no_goobledygook.sh`
-- ZIP-friendly installer: `Install Si Or No Goobledygook.command`
+- Main script: `bin/macbook_anonymizer.sh`
+- ZIP-friendly installer: `Install MacBook Anonymizer.command`
 - GitHub installer: `install-from-github.sh`
 - Standard installer: `install.sh`
-- Menu launcher: `Si Or No Goobledygook.command`
+- Menu launcher: `MacBook Anonymizer.command`
 - macOS app builder: `build_macos_app.sh`
 - Icon generator: `generate_macos_icon.sh`
 - Release packager: `package_macos_release.sh`
 - Real-Mac smoke test: `real_macos_smoke_test.sh`
 - Real-Mac smoke test guide: `REAL_MAC_SMOKE_TEST.md`
-- Icon source: `assets/si_or_no_goobledygook-icon.svg`
-- Local state snapshot: `~/.si_or_no_goobledygook/proxy_state.tsv`
+- Icon source: `assets/macbook_anonymizer-icon.svg`
+- Local state snapshot: `~/.macbook_anonymizer/proxy_state.tsv`
 
 ## Requirements
 
@@ -144,7 +144,7 @@ See [macos-app/README.md](macos-app/README.md) for detailed build and installati
 ## Usage
 
 ```bash
-cd si-or-no-goobledygook
+cd macbook-anonymizer
 
 # One-time setup
 ./install.sh
@@ -156,48 +156,48 @@ cd si-or-no-goobledygook
 open ~/Applications/Si\ Or\ No\ Goobledygook.app
 
 # Diagnostics
-./bin/si_or_no_goobledygook.sh doctor
+./bin/macbook_anonymizer.sh doctor
 
 # Review local host identity exposure
-./bin/si_or_no_goobledygook.sh privacy-report
+./bin/macbook_anonymizer.sh privacy-report
 
 # Print Tor proxy environment variables for proxy-aware apps
-./bin/si_or_no_goobledygook.sh tor-env
+./bin/macbook_anonymizer.sh tor-env
 
 # Replace local hostname values with a generic label
-./bin/si_or_no_goobledygook.sh cloak-hostname anon-mac
+./bin/macbook_anonymizer.sh cloak-hostname anon-mac
 
 # Enable Tor routing
-./bin/si_or_no_goobledygook.sh start
+./bin/macbook_anonymizer.sh start
 
 # Check status and verify
-./bin/si_or_no_goobledygook.sh status
-./bin/si_or_no_goobledygook.sh test
+./bin/macbook_anonymizer.sh status
+./bin/macbook_anonymizer.sh test
 
 # Run the full guided verification flow
-./bin/si_or_no_goobledygook.sh self-test
+./bin/macbook_anonymizer.sh self-test
 
 # Ask Tor for a new circuit
-./bin/si_or_no_goobledygook.sh newnym
+./bin/macbook_anonymizer.sh newnym
 
 # Print leak-risk checklist
-./bin/si_or_no_goobledygook.sh checklist
+./bin/macbook_anonymizer.sh checklist
 
 # List and launch curated safer app profiles
-./bin/si_or_no_goobledygook.sh safe-apps
-./bin/si_or_no_goobledygook.sh launch-safe-app tor-browser
+./bin/macbook_anonymizer.sh safe-apps
+./bin/macbook_anonymizer.sh launch-safe-app tor-browser
 
 # Launch Tor Browser with reminders
-./bin/si_or_no_goobledygook.sh open-tor-browser
+./bin/macbook_anonymizer.sh open-tor-browser
 
 # Restore normal state
-./bin/si_or_no_goobledygook.sh stop
+./bin/macbook_anonymizer.sh stop
 
 # Fast emergency rollback
-./bin/si_or_no_goobledygook.sh panic-stop
+./bin/macbook_anonymizer.sh panic-stop
 
 # Restore saved hostname values
-./bin/si_or_no_goobledygook.sh restore-hostname
+./bin/macbook_anonymizer.sh restore-hostname
 
 # Optional .app wrapper build on macOS
 ./build_macos_app.sh
@@ -211,10 +211,10 @@ open ~/Applications/Si\ Or\ No\ Goobledygook.app
 
 ## Everyday Use
 
-- Double-click `Si Or No Goobledygook.command` for the menu-driven version.
-- If the installer created `~/Applications/Si Or No Goobledygook.app`, you can launch it from Launchpad like a normal Mac app.
-- Run `./bin/si_or_no_goobledygook.sh start` before an anonymous session.
-- Run `./bin/si_or_no_goobledygook.sh stop` when the session ends.
+- Double-click `MacBook Anonymizer.command` for the menu-driven version.
+- If the installer created `~/Applications/MacBook Anonymizer.app`, you can launch it from Launchpad like a normal Mac app.
+- Run `./bin/macbook_anonymizer.sh start` before an anonymous session.
+- Run `./bin/macbook_anonymizer.sh stop` when the session ends.
 - Use `panic-stop` if you want the fastest available rollback.
 
 ## Packaging and Release Builds

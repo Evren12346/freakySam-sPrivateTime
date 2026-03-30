@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TOOL_NAME="freaky sam's private time"
-STATE_DIR="${HOME}/.freaky-sams-private-time"
+TOOL_NAME="macbook anonymizer"
+STATE_DIR="${HOME}/.macbook-anonymizer"
 STATE_FILE="${STATE_DIR}/proxy_state.tsv"
 IDENTITY_STATE_FILE="${STATE_DIR}/identity_state.tsv"
 TOR_SOCKS_HOST="127.0.0.1"
@@ -13,27 +13,27 @@ APP_SEARCH_ROOTS_DEFAULT="/Applications:${HOME}/Applications:/System/Application
 
 usage() {
 	cat <<'EOF'
-freaky sam's private time
+macbook anonymizer
 
 Usage:
-	freaky-sams-private-time.sh install
-	freaky-sams-private-time.sh doctor
-	freaky-sams-private-time.sh start
-	freaky-sams-private-time.sh stop
-	freaky-sams-private-time.sh panic-stop
-	freaky-sams-private-time.sh status
-	freaky-sams-private-time.sh test
-	freaky-sams-private-time.sh self-test
-	freaky-sams-private-time.sh privacy-report
-	freaky-sams-private-time.sh tor-env
-	freaky-sams-private-time.sh cloak-hostname [label]
-	freaky-sams-private-time.sh restore-hostname
-	freaky-sams-private-time.sh newnym
-	freaky-sams-private-time.sh checklist
-	freaky-sams-private-time.sh safe-apps
-	freaky-sams-private-time.sh launch-safe-app <profile>
-	freaky-sams-private-time.sh open-tor-browser
-	freaky-sams-private-time.sh validate
+	macbook-anonymizer.sh install
+	macbook-anonymizer.sh doctor
+	macbook-anonymizer.sh start
+	macbook-anonymizer.sh stop
+	macbook-anonymizer.sh panic-stop
+	macbook-anonymizer.sh status
+	macbook-anonymizer.sh test
+	macbook-anonymizer.sh self-test
+	macbook-anonymizer.sh privacy-report
+	macbook-anonymizer.sh tor-env
+	macbook-anonymizer.sh cloak-hostname [label]
+	macbook-anonymizer.sh restore-hostname
+	macbook-anonymizer.sh newnym
+	macbook-anonymizer.sh checklist
+	macbook-anonymizer.sh safe-apps
+	macbook-anonymizer.sh launch-safe-app <profile>
+	macbook-anonymizer.sh open-tor-browser
+	macbook-anonymizer.sh validate
 
 Commands:
 	install  Install required dependencies with Homebrew (tor, curl, torsocks).
@@ -130,7 +130,7 @@ open_app_path() {
 }
 
 list_app_search_roots() {
-	local roots="${FREAKY_APP_SEARCH_ROOTS:-$APP_SEARCH_ROOTS_DEFAULT}"
+	local roots="${MACBOOK_ANONYMIZER_APP_SEARCH_ROOTS:-$APP_SEARCH_ROOTS_DEFAULT}"
 	printf '%s' "$roots" | tr ':' '\n'
 }
 
