@@ -23,7 +23,25 @@ MACBOOK_ANONYMIZER_AUTO_LAUNCH=0 curl -fsSL https://raw.githubusercontent.com/Ev
 Manual launch (any time):
 
 ```bash
-~/Applications/Si\ Or\ No\ Goobledygook/Si\ Or\ No\ Goobledygook.command
+~/Applications/MacBook\ Anonymizer/MacBook\ Anonymizer.command
+```
+
+## Fast Install for Ubuntu Users
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-ubuntu.sh | bash
+```
+
+If you prefer no auto-open:
+
+```bash
+MACBOOK_ANONYMIZER_AUTO_LAUNCH=0 curl -fsSL https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-ubuntu-from-github.sh | bash
+```
+
+Manual launch (any time):
+
+```bash
+~/Applications/MacBook\ Anonymizer\ Ubuntu/MacBook\ Anonymizer\ Ubuntu.command
 ```
 
 ## Direct ZIP Download
@@ -49,7 +67,15 @@ This installs the project into `~/Applications/MacBook Anonymizer`, installs dep
 
 The GitHub installer now prefers the latest GitHub release tag when one exists, falls back to `main` if needed, and creates a Launchpad-ready app bundle in `~/Applications`.
 
-### Option 3: Git clone
+### Option 3: One-line Ubuntu install from GitHub
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-ubuntu.sh | bash
+```
+
+This installs the Ubuntu version into `~/Applications/MacBook Anonymizer Ubuntu`, installs Linux dependencies, and opens the Ubuntu menu launcher.
+
+### Option 4: Git clone
 
 ```bash
 git clone https://github.com/Evren12346/macbook-anonymizer.git
@@ -69,7 +95,7 @@ After installing:
 The easiest way to do this is the included menu launcher:
 
 ```bash
-./Si\ Or\ No\ Goobledygook.command
+./MacBook\ Anonymizer.command
 ```
 
 The installer also tries to create:
@@ -123,10 +149,14 @@ See [macos-app/README.md](macos-app/README.md) for detailed build and installati
 ## Command-Line Files
 
 - Main script: `bin/macbook_anonymizer.sh`
+- Ubuntu script: `bin/macbook_anonymizer_ubuntu.sh`
 - ZIP-friendly installer: `Install MacBook Anonymizer.command`
 - GitHub installer: `install-from-github.sh`
+- Ubuntu GitHub installer: `install-ubuntu-from-github.sh`
+- Ubuntu one-line wrapper: `install-ubuntu.sh`
 - Standard installer: `install.sh`
 - Menu launcher: `MacBook Anonymizer.command`
+- Ubuntu menu launcher: `MacBook Anonymizer Ubuntu.command`
 - macOS app builder: `build_macos_app.sh`
 - Icon generator: `generate_macos_icon.sh`
 - Release packager: `package_macos_release.sh`
@@ -137,9 +167,8 @@ See [macos-app/README.md](macos-app/README.md) for detailed build and installati
 
 ## Requirements
 
-- macOS
-- Homebrew
-- Administrator privileges may be required for `cloak-hostname` and `restore-hostname`
+- macOS: Homebrew + admin privileges may be required for `cloak-hostname` and `restore-hostname`
+- Ubuntu: `apt-get` + admin privileges for dependency install and hostname operations
 
 ## Usage
 
@@ -150,10 +179,10 @@ cd macbook-anonymizer
 ./install.sh
 
 # Open the interactive menu
-./Si\ Or\ No\ Goobledygook.command
+./MacBook\ Anonymizer.command
 
-# Or launch the installed app bundle if it was created in ~/Applications
-open ~/Applications/Si\ Or\ No\ Goobledygook.app
+# Or launch the installed app bundle if it was created in ~/Applications (macOS)
+open ~/Applications/MacBook\ Anonymizer.app
 
 # Diagnostics
 ./bin/macbook_anonymizer.sh doctor
@@ -210,15 +239,33 @@ open ~/Applications/Si\ Or\ No\ Goobledygook.app
 
 # Real-Mac validation run
 ./real_macos_smoke_test.sh
+
+# Ubuntu menu launcher
+./MacBook\ Anonymizer\ Ubuntu.command
+
+# Ubuntu diagnostics
+./bin/macbook_anonymizer_ubuntu.sh doctor
+
+# Ubuntu start/stop flow
+./bin/macbook_anonymizer_ubuntu.sh start
+./bin/macbook_anonymizer_ubuntu.sh test
+./bin/macbook_anonymizer_ubuntu.sh stop
 ```
 
 ## Everyday Use
 
 - Double-click `MacBook Anonymizer.command` for the menu-driven version.
+- On Ubuntu, launch `MacBook Anonymizer Ubuntu.command` for the matching menu-driven version.
 - If the installer created `~/Applications/MacBook Anonymizer.app`, you can launch it from Launchpad like a normal Mac app.
 - Run `./bin/macbook_anonymizer.sh start` before an anonymous session.
 - Run `./bin/macbook_anonymizer.sh stop` when the session ends.
 - Use `panic-stop` if you want the fastest available rollback.
+
+## Ubuntu Version Notes
+
+- The Ubuntu command set mirrors the macOS flow and menu labels as closely as possible.
+- Desktop proxy routing uses GNOME `gsettings` when available; on other desktop environments, use `tor-env` with proxy-aware apps.
+- Tor startup prefers system services and falls back to a local Tor daemon when needed.
 
 ## Packaging and Release Builds
 

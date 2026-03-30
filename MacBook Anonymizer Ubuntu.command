@@ -2,13 +2,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TOOL="$SCRIPT_DIR/bin/macbook_anonymizer.sh"
+TOOL="$SCRIPT_DIR/bin/macbook_anonymizer_ubuntu.sh"
 
 chmod +x "$TOOL"
 
 while true; do
   clear
-  echo "macbook anonymizer"
+  echo "macbook anonymizer (ubuntu)"
   echo
   echo "1. Install dependencies"
   echo "2. Doctor"
