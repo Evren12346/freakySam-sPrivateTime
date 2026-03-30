@@ -11,6 +11,31 @@ REPO_API_URL="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}"
 REPO_REF=""
 ARCHIVE_URL=""
 
+validate_install_dir() {
+	if [[ -z "$INSTALL_DIR" || "$INSTALL_DIR" == "/" || "$INSTALL_DIR" == "." ]]; then
+		echo "Refusing unsafe install directory: '$INSTALL_DIR'"
+		exit 1
+	fi
+	if [[ "$INSTALL_DIR" == *$'\n'* ]]; then
+		echo "Install directory contains invalid newline characters."
+		exit 1
+	fi
+	if [[ "$INSTALL_DIR" != /* ]]; then
+		echo "Install directory must be an absolute path."
+		exit 1
+	fi
+}
+
+validate_requested_ref() {
+	if [[ -z "$1" ]]; then
+		return 0
+	fi
+	if [[ ! "$1" =~ ^[A-Za-z0-9._/-]+$ ]]; then
+		echo "Invalid install ref format: $1"
+		exit 1
+	fi
+}
+
 cleanup() {
 	rm -rf "$TMP_DIR"
 }
@@ -38,6 +63,7 @@ require_cmd tar
 resolve_release_ref() {
 	local requested_ref="${MACBOOK_ANONYMIZER_INSTALL_REF:-}"
 	local release_json latest_tag
+	validate_requested_ref "$requested_ref"
 	if [[ -n "$requested_ref" ]]; then
 		REPO_REF="$requested_ref"
 		return 0
@@ -61,6 +87,7 @@ build_archive_url() {
 
 resolve_release_ref
 build_archive_url
+validate_install_dir
 
 mkdir -p "$PAYLOAD_DIR"
 
@@ -70,6 +97,10 @@ curl -fsSL "$ARCHIVE_URL" | tar -xz -C "$PAYLOAD_DIR"
 EXTRACTED_DIR="$(find "$PAYLOAD_DIR" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
 if [[ -z "$EXTRACTED_DIR" ]]; then
 	echo "Failed to extract the repository archive."
+	exit 1
+fi
+if [[ "$(basename "$EXTRACTED_DIR")" != ${REPO_NAME}-* ]]; then
+	echo "Unexpected archive layout: $(basename "$EXTRACTED_DIR")"
 	exit 1
 fi
 

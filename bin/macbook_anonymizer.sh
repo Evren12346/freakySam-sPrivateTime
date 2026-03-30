@@ -129,6 +129,22 @@ run_privileged() {
 ensure_state_dir() {
 	mkdir -p "$STATE_DIR"
 	chmod 700 "$STATE_DIR" 2>/dev/null || true
+	if [[ -L "$STATE_DIR" ]]; then
+		echo "Refusing to use symlinked state directory: $STATE_DIR"
+		exit 1
+	fi
+}
+
+ensure_safe_state_file() {
+	local file_path="$1"
+	if [[ -L "$file_path" ]]; then
+		echo "Refusing to use symlinked state file: $file_path"
+		exit 1
+	fi
+	if [[ -e "$file_path" && ! -f "$file_path" ]]; then
+		echo "Refusing to use non-regular state file: $file_path"
+		exit 1
+	fi
 }
 
 generate_default_hostname_label() {
@@ -257,6 +273,7 @@ scutil_get_value() {
 
 save_identity_state() {
 	ensure_state_dir
+	ensure_safe_state_file "$IDENTITY_STATE_FILE"
 	printf 'ComputerName\t%s\n' "$(scutil_get_value ComputerName)" > "$IDENTITY_STATE_FILE"
 	printf 'LocalHostName\t%s\n' "$(scutil_get_value LocalHostName)" >> "$IDENTITY_STATE_FILE"
 	printf 'HostName\t%s\n' "$(scutil_get_value HostName)" >> "$IDENTITY_STATE_FILE"
@@ -269,6 +286,7 @@ read_identity_state_field() {
 }
 
 restore_identity_state() {
+	ensure_safe_state_file "$IDENTITY_STATE_FILE"
 	if [[ ! -f "$IDENTITY_STATE_FILE" ]]; then
 		echo "No saved hostname state found."
 		return 1
@@ -352,6 +370,7 @@ normalize_yes_no_state() {
 
 snapshot_proxy_state() {
 	ensure_state_dir
+	ensure_safe_state_file "$STATE_FILE"
 	: > "$STATE_FILE"
 	chmod 600 "$STATE_FILE" 2>/dev/null || true
 	while IFS= read -r service; do
@@ -384,6 +403,7 @@ snapshot_proxy_state() {
 }
 
 restore_proxy_state() {
+	ensure_safe_state_file "$STATE_FILE"
 	if [[ ! -f "$STATE_FILE" ]]; then
 		echo "No saved proxy state found at: $STATE_FILE"
 		echo "Safety guard: leaving existing proxy settings unchanged."

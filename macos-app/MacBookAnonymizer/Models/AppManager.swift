@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 class AppManager: NSObject, ObservableObject {
     @Published var isRunning = false
@@ -68,16 +69,22 @@ class AppManager: NSObject, ObservableObject {
         output = "Running command: \(args.joined(separator: " "))...\n"
         
         DispatchQueue.global(qos: .userInitiated).async {
+            let scriptURL = URL(fileURLWithPath: self.scriptPath)
+            guard FileManager.default.isReadableFile(atPath: self.scriptPath) else {
+                DispatchQueue.main.async {
+                    self.output = "Error: Script not found or unreadable at \(self.scriptPath)"
+                    self.isLoading = false
+                }
+                return
+            }
+
             let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/bin/bash")
+            process.executableURL = scriptURL
+            process.arguments = args
             
             let pipe = Pipe()
             process.standardOutput = pipe
             process.standardError = pipe
-            
-            // Build command - use sudo if needed
-            let cmd = "cd '\(NSHomeDirectory())/Applications/MacBook Anonymizer' && './bin/macbook_anonymizer.sh' \(args.joined(separator: " "))"
-            process.arguments = ["-c", cmd]
             
             do {
                 try process.run()

@@ -17,7 +17,7 @@ This installs everything and auto-opens the menu launcher.
 If you prefer no auto-open:
 
 ```bash
-SI_OR_NO_AUTO_LAUNCH=0 curl -fsSL https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-from-github.sh | bash
+MACBOOK_ANONYMIZER_AUTO_LAUNCH=0 curl -fsSL https://raw.githubusercontent.com/Evren12346/macbook-anonymizer/main/install-from-github.sh | bash
 ```
 
 Manual launch (any time):
