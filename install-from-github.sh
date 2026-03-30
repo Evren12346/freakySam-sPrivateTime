@@ -4,7 +4,7 @@ set -euo pipefail
 REPO_OWNER="Evren12346"
 REPO_NAME="macbook-anonymizer"
 INSTALL_DIR="${MACBOOK_ANONYMIZER_INSTALL_DIR:-$HOME/Applications/MacBook Anonymizer}"
-AUTO_LAUNCH="${SI_OR_NO_AUTO_LAUNCH:-1}"
+AUTO_LAUNCH="${MACBOOK_ANONYMIZER_AUTO_LAUNCH:-${SI_OR_NO_AUTO_LAUNCH:-1}}"
 TMP_DIR="$(mktemp -d)"
 PAYLOAD_DIR="$TMP_DIR/payload"
 REPO_API_URL="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}"
@@ -105,5 +105,5 @@ if [[ "$AUTO_LAUNCH" == "1" ]]; then
 	echo
 	echo "Opening the menu launcher now..."
 	open "$INSTALL_DIR/MacBook Anonymizer.command" || true
-	echo "Tip: disable auto-launch with SI_OR_NO_AUTO_LAUNCH=0"
+	echo "Tip: disable auto-launch with MACBOOK_ANONYMIZER_AUTO_LAUNCH=0"
 fi

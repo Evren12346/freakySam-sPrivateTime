@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Keep state files private by default.
+umask 077
+
 TOOL_NAME="macbook anonymizer"
 STATE_DIR="${HOME}/.macbook-anonymizer"
 STATE_FILE="${STATE_DIR}/proxy_state.tsv"
@@ -110,6 +113,7 @@ run_privileged() {
 
 ensure_state_dir() {
 	mkdir -p "$STATE_DIR"
+	chmod 700 "$STATE_DIR" 2>/dev/null || true
 }
 
 generate_default_hostname_label() {
@@ -241,6 +245,7 @@ save_identity_state() {
 	printf 'ComputerName\t%s\n' "$(scutil_get_value ComputerName)" > "$IDENTITY_STATE_FILE"
 	printf 'LocalHostName\t%s\n' "$(scutil_get_value LocalHostName)" >> "$IDENTITY_STATE_FILE"
 	printf 'HostName\t%s\n' "$(scutil_get_value HostName)" >> "$IDENTITY_STATE_FILE"
+	chmod 600 "$IDENTITY_STATE_FILE" 2>/dev/null || true
 }
 
 read_identity_state_field() {
@@ -333,6 +338,7 @@ normalize_yes_no_state() {
 snapshot_proxy_state() {
 	ensure_state_dir
 	: > "$STATE_FILE"
+	chmod 600 "$STATE_FILE" 2>/dev/null || true
 	while IFS= read -r service; do
 		[[ -n "$service" ]] || continue
 		local socks_enabled socks_server socks_port
@@ -364,17 +370,9 @@ snapshot_proxy_state() {
 
 restore_proxy_state() {
 	if [[ ! -f "$STATE_FILE" ]]; then
-		echo "No saved state found. Disabling configured proxies on all services."
-		while IFS= read -r service; do
-			[[ -n "$service" ]] || continue
-			networksetup -setsocksfirewallproxystate "$service" off >/dev/null
-			networksetup -setwebproxystate "$service" off >/dev/null
-			networksetup -setsecurewebproxystate "$service" off >/dev/null
-			networksetup -setautoproxystate "$service" off >/dev/null
-			networksetup -setproxyautodiscovery "$service" off >/dev/null
-			networksetup -setproxybypassdomains "$service" Empty >/dev/null
-		 done < <(list_services)
-		return
+		echo "No saved proxy state found at: $STATE_FILE"
+		echo "Safety guard: leaving existing proxy settings unchanged."
+		return 1
 	fi
 
 	while IFS=$'\t' read -r service \
@@ -551,11 +549,29 @@ cmd_start() {
 	require_cmd brew
 	require_cmd nc
 
+	local original_tor_state=""
+	local start_succeeded=0
+	original_tor_state="$(brew services list | awk '$1=="tor" {print $2; exit}')"
+
+	rollback_on_failed_start() {
+		if [[ "$start_succeeded" -eq 1 ]]; then
+			return 0
+		fi
+		echo "Start failed. Attempting safety rollback..."
+		restore_proxy_state >/dev/null 2>&1 || true
+		if [[ "$original_tor_state" != "started" ]]; then
+			stop_tor >/dev/null 2>&1 || true
+		fi
+	}
+	trap rollback_on_failed_start RETURN
+
 	echo "Starting $TOOL_NAME..."
 	snapshot_proxy_state
 	start_tor
 	wait_for_tor
 	route_all_services_through_tor
+	start_succeeded=1
+	trap - RETURN
 
 	echo "Tor SOCKS routing enabled on all macOS network services."
 	echo "Proxy auto-config, auto-discovery, and bypass domains were disabled while active."
@@ -569,9 +585,13 @@ cmd_stop() {
 	require_cmd brew
 
 	echo "Stopping $TOOL_NAME..."
-	restore_proxy_state
+	if restore_proxy_state; then
+		echo "Proxy settings restored from saved state."
+	else
+		echo "Warning: no saved state available; proxy settings were left unchanged."
+	fi
 	stop_tor
-	echo "Proxy settings restored and tor service stopped."
+	echo "Tor service stopped."
 }
 
 cmd_panic_stop() {
@@ -848,6 +868,11 @@ cmd_validate() {
 	require_cmd awk
 	require_cmd sed
 	require_cmd paste
+	require_cmd networksetup
+	require_cmd scutil
+	echo "Validated state directory: $STATE_DIR"
+	echo "Validated state file path: $STATE_FILE"
+	echo "Validated identity state path: $IDENTITY_STATE_FILE"
 	echo "Static validation checks passed."
 }
 
